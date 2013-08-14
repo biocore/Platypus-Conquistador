@@ -11,7 +11,7 @@ __maintainer__ = "Antonio Gonzalez Pena"
 __email__ = "antgonza@gmail.com"
 __status__ = "Development"
 
-from platypus.compare import (sequences_for_query, PlatypusParseError,
+from platypus.compare import (sequences_from_query, PlatypusParseError,
     PlatypusValueError)
 
 from os import makedirs
@@ -34,7 +34,13 @@ script_info['script_usage'] = [("Search for the string 'salmonella'","Passing a"
     "corresponding sequences; search and split the data in sequences that match"
     " the string 'salmonella' for their taxonomy assignment and the ones that "
     "doesn't. The output is stored in a directory named databases.","%prog -t "
-    "bacteria.contigs.txt -f bacteria.contigs.fna -q 'salmonella -o databases")]
+    "bacteria.contigs.txt -f bacteria.contigs.fna -q 'salmonella' -o databases")]
+script_info['script_usage'] += [("Search for the ids in the file: seqs_id.txt",
+    "Passing a tab-delimited taxonomy file and a FASTA-formatted file with the "
+    "corresponding sequences; search and split the data in sequences that match "
+    "the ids in the text file and the ones that doesn't. The output is stored in "
+    "a directory named databases.","%prog -t bacteria.contigs.txt -f "
+    "bacteria.contigs.fna -q seqs_id.txt -o databases")]
 script_info['output_description']= "An output directory with two FASTA "+\
     "formatted files, one with the matches to the query (interest.fna) and "+\
     "one with the rest of the contents (rest.fna)."
@@ -46,13 +52,17 @@ script_info['required_options'] = [
     make_option( '-f', '--fasta_fp', type="existing_filepath", help='path to a '
     'FASTA formatted file to split in interest and rest. Note: sequence '
     'identifiers must match the ones in the taxonomy file.'),
-    make_option( '-q', '--query', type="string", help='the query used to split '
-    'the database, for example: salmonella. The query should be an exact match,'
-    ' no wildcards, it can have spaces, and it is case insensitive.'),
     make_option( '-o', '--output_fp', type="new_dirpath", help='output folder '
     'path where the results are stored')
 ]
-script_info['optional_options'] = []
+script_info['optional_options'] = [
+    make_option( '-q', '--query', type="string", help='the query used to split '
+    'the database, for example: salmonella. The query should be an exact match, '
+    'no wildcards, it can have spaces, and it is case insensitive.'),
+    make_option( '-s', '--split_file', type="existing_filepath", help='the tab '
+    'separated query file, where the first column is the id of the sequeces that '
+    'you want to keep in your interest db.'),
+]
 script_info['version'] = __version__
 
 
@@ -63,16 +73,26 @@ def main():
     fasta_fp = opts.fasta_fp
     query = opts.query
     output_fp = opts.output_fp
+    split_file = opts.split_file
+    
+    if (query==None and split_file==None) or (query!=None and split_file!=None):
+        raise IOError, "You must specify one and only one between query: " +\
+            "'%s' and split_file: '%s'" % (query, split_file)
+    
+    if query!=None:
+        # query the taxonomy file for the required sequence identifiers
+        try:
+            interest_taxonomy = sequences_from_query(open(taxonomy_fp, 'U'), query)
+        except (PlatypusValueError, PlatypusParseError), e:
+            option_parser.error(e.message)
 
-    # query the taxonomy file for the required sequence identifiers
-    try:
-        taxonomy_dict = sequences_for_query(open(taxonomy_fp, 'U'), query)
-    except (PlatypusValueError, PlatypusParseError), e:
-        option_parser.error(e.message)
-
-    if len(taxonomy_dict)==0:
-        option_parser.error('The query could no results, try a different one')
-
+        if len(interest_taxonomy)==0:
+            option_parser.error('The query could no results, try a different one')
+    else:
+        try:
+            interest_taxonomy = { l.strip().split('\t')[0].strip(): '' for l in open(split_file, 'U') }
+        except (PlatypusValueError, PlatypusParseError), e:
+            option_parser.error(e.message)
     try:
        makedirs(opts.output_fp)
     except OSError:
@@ -84,7 +104,7 @@ def main():
     for full_name, seq in MinimalFastaParser(open(opts.fasta_fp,'U')):
          name = full_name.strip().split(' ')[0].strip()
 
-         if name in taxonomy_dict:
+         if name in interest_taxonomy:
             interest_fp.write(">%s\n%s\n" % (full_name, seq))
          else:
             rest_fp.write(">%s\n%s\n" % (full_name, seq))

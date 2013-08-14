@@ -12,7 +12,7 @@ __email__ = "yoshiki89@gmail.com"
 __status__ = "Development"
 
 
-from platypus.compare import (sequences_for_query, PlatypusParseError,
+from platypus.compare import (sequences_from_query, PlatypusParseError,
     PlatypusValueError)
 
 from os.path import dirname, join, abspath
@@ -27,9 +27,9 @@ class TopLevelTests(TestCase):
         self.taxonomy_lines = TAXONOMY_LINES
         self.broken_taxonomy_lines = BROKEN_TAXONOMY_LINES
 
-    def test_sequences_for_query_file(self):
+    def test_sequences_from_query_file(self):
         """Check correct parsing when input is a file path"""
-        out_tax_dict = sequences_for_query(self.taxonomy_fp, 'Beggiatoa')
+        out_tax_dict = sequences_from_query(self.taxonomy_fp, 'Beggiatoa')
         self.assertEquals(out_tax_dict, {'NZ_ABBZ01000843|640963011':
             'VibrioBeggiatoa sp. PS', 'NZ_ABBZ01000613|640963011':
             'VibrioBeggiatoa sp. PS', 'NZ_ABBZ01002042|640963011':
@@ -40,12 +40,12 @@ class TopLevelTests(TestCase):
             'VibrioBeggiatoa sp. PS', 'NZ_ABBZ01005870|640963011':
             'VibrioBeggiatoa sp. PS'})
 
-        out_tax_dict = sequences_for_query(self.taxonomy_fp, 'Rumba')
+        out_tax_dict = sequences_from_query(self.taxonomy_fp, 'Rumba')
         self.assertEquals(out_tax_dict, {})
 
-    def test_sequences_for_query_string(self):
+    def test_sequences_from_query_string(self):
         """Check correct parsing when input is a string"""
-        out_tax_dict = sequences_for_query(self.taxonomy_lines, 'Beggiatoa')
+        out_tax_dict = sequences_from_query(self.taxonomy_lines, 'Beggiatoa')
         self.assertEquals(out_tax_dict, {'NZ_ABBZ01000843|640963011':
             'VibrioBeggiatoa sp. PS', 'NZ_ABBZ01000613|640963011':
             'VibrioBeggiatoa sp. PS', 'NZ_ABBZ01002042|640963011':
@@ -56,17 +56,17 @@ class TopLevelTests(TestCase):
             'VibrioBeggiatoa sp. PS', 'NZ_ABBZ01005870|640963011':
             'VibrioBeggiatoa sp. PS'})
 
-        out_tax_dict = sequences_for_query(self.taxonomy_lines, 'Rumba')
+        out_tax_dict = sequences_from_query(self.taxonomy_lines, 'Rumba')
         self.assertEquals(out_tax_dict, {})
 
-    def test_sequences_for_query_exceptions(self):
+    def test_sequences_from_query_exceptions(self):
         """Check exceptions are raised accordingly"""
         # re-format the file to make it "BOOM" delimited
-        self.assertRaises(PlatypusParseError, sequences_for_query,
+        self.assertRaises(PlatypusParseError, sequences_from_query,
             self.taxonomy_lines.replace('\t', 'BOOOM'), 'Beggiatoa')
 
         # repeated sequence identifiers
-        self.assertRaises(PlatypusValueError, sequences_for_query,
+        self.assertRaises(PlatypusValueError, sequences_from_query,
             self.broken_taxonomy_lines, 'parahaemolyticus')
 
 
