@@ -23,7 +23,7 @@ class PlatypusValueError(PlatypusError):
     """Inconsistency of inputs in the Platypus module"""
     pass
 
-def sequences_for_query(taxonomy, query):
+def sequences_from_query(taxonomy, query):
     """Parses and searches for a query in the contents of taxonomy
 
     Inputs:
@@ -32,7 +32,7 @@ def sequences_for_query(taxonomy, query):
     query: string to search for in the taxonomy assignments
 
     Output:
-    taxonomy_dict: 1-D dictionary where the keys are the sequence identifiers
+    interest_taxonomy: 1-D dictionary where the keys are the sequence identifiers
     and the values are the taxonomy assignments
 
     Raises:
@@ -41,7 +41,7 @@ def sequences_for_query(taxonomy, query):
     """
     # Note this function could be greatly benefited from a C extension
 
-    taxonomy_dict = {}
+    interest_taxonomy = {}
     try:    # file path
         fd = open(taxonomy, 'U')
     except IOError: # string with lines, split on new lines
@@ -58,7 +58,7 @@ def sequences_for_query(taxonomy, query):
 
         sequence_identifier = sequence_identifier.strip()
 
-        if sequence_identifier in taxonomy_dict:
+        if sequence_identifier in interest_taxonomy:
             # if possible close the file descriptor before leaving the function
             try:
                 fd.close()
@@ -69,7 +69,7 @@ def sequences_for_query(taxonomy, query):
                 "taxonomy file (%s)." % sequence_identifier
 
         elif query.lower() in taxa_name.lower():
-            taxonomy_dict[sequence_identifier] = taxa_name.strip()
+            interest_taxonomy[sequence_identifier] = taxa_name.strip()
 
     # not all input types are file descriptors
     try:
@@ -77,4 +77,4 @@ def sequences_for_query(taxonomy, query):
     except AttributeError:
         pass
 
-    return taxonomy_dict
+    return interest_taxonomy
