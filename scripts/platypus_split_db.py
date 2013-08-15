@@ -58,10 +58,10 @@ script_info['required_options'] = [
 script_info['optional_options'] = [
     make_option( '-q', '--query', type="string", help='the query used to split '
     'the database, for example: salmonella. The query should be an exact match, '
-    'no wildcards, it can have spaces, and it is case insensitive.'),
+    'no wildcards, it can have spaces, and it is case insensitive'),
     make_option( '-s', '--split_file', type="existing_filepath", help='the tab '
-    'separated query file, where the first column is the id of the sequeces that '
-    'you want to keep in your interest db.'),
+    'separated query file, where each line is a different sequence and the first '
+    'column is the sequence id'),
 ]
 script_info['version'] = __version__
 
@@ -76,7 +76,7 @@ def main():
     split_file = opts.split_file
     
     if (query==None and split_file==None) or (query!=None and split_file!=None):
-        raise IOError, "You must specify one and only one between query: " +\
+        raise option_parser.error , "You must specify one and only one between query: " +\
             "'%s' and split_file: '%s'" % (query, split_file)
     
     if query!=None:
@@ -87,7 +87,8 @@ def main():
             option_parser.error(e.message)
 
         if len(interest_taxonomy)==0:
-            option_parser.error('The query could no results, try a different one')
+            option_parser.error('The query could not retrieve any results, try a '
+                'different one.')
     else:
         try:
             interest_taxonomy = { l.strip().split('\t')[0].strip(): '' for l in open(split_file, 'U') }
