@@ -29,7 +29,7 @@ def parse_first_database(db, percentage_ids, alignment_lengths):
     results = MinimalBlastParser9(db)
 
     # cogent.util.transform.cartesian_product
-    options = product(percentage_ids, alignment_lengths)
+    options = list(product(percentage_ids, alignment_lengths))
 
     best_hits = {}
     for total_queries, (metadata, hits) in enumerate(results):
