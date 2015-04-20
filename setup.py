@@ -28,7 +28,7 @@ long_description = ("Platypus Conquistador: Confirming specific taxonomic "
 
 base = {"click", "scikit-bio >= 0.2.1, < 0.3.0", 'cogent'}
 test = {"nose >= 0.10.1", "pep8", "flake8"}
-all_deps = base | doc | test
+all_deps = base | test
 
 setup(name='platytpus',
       version='0.0.8-dev',
@@ -47,4 +47,3 @@ setup(name='platytpus',
       data_files={},
       long_description=long_description,
       classifiers=classifiers)
-
