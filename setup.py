@@ -26,7 +26,7 @@ classifiers = [s.strip() for s in classes.split('\n') if s]
 long_description = ("Platypus Conquistador: Confirming specific taxonomic "
                     "groups within your metagenomic samples.")
 
-base = {"click", "scikit-bio >= 0.2.1, < 0.3.0"}
+base = {"click", "scikit-bio >= 0.2.1, < 0.3.0", 'cogent'}
 test = {"nose >= 0.10.1", "pep8", "flake8"}
 all_deps = base | doc | test
 
