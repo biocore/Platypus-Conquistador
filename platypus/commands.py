@@ -8,9 +8,14 @@
 
 from os.path import join
 from operator import itemgetter
+from os import makedirs
+
 from click import BadParameter
 from skbio.util import create_dir
+from cogent.parse.fasta import MinimalFastaParser
 
+from platypus.compare import (sequences_from_query, PlatypusParseError,
+    PlatypusValueError)
 from platypus.parse import (parse_first_database, parse_second_database,
                             process_results)
 
@@ -157,3 +162,63 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
         fd.write('\n'.join(['\t'.join(item)
                             for item in combined_results[:-1]]))
 
+
+def split_db(tax_fp, seqs_fp, query, output_fp, split_fp):
+    """Split a database in parts that match a query and parts that don't
+
+    Parameters
+    ----------
+    tax_fp : str
+        Tab-delimited file with two columns, name/identifier of the sequence
+        and the taxonomy. The sequence identifier is the longest string before
+        a space in the header of the sequence.
+    seqs_fp : str
+        Path to a FASTA formatted file to split in interest and rest. Note:
+        sequence identifiers must match the ones in the taxonomy file.
+    query : str
+        The query used to split the database, for example: salmonella. The
+        query should be an exact match, no wild cards, it can have spaces, and
+        it is case insensitive
+    output_fp : str
+        Output folder path where the results are stored.
+    split_fp : str
+        The tab delimited query file, where each line is a different sequence
+        and the first column is the sequence id.
+    """
+
+    if query is not None:
+        # query the taxonomy file for the required sequence identifiers
+        try:
+            interest_taxonomy = sequences_from_query(open(tax_fp, 'U'),
+                                                     query)
+        except (PlatypusValueError, PlatypusParseError), e:
+            raise BadParameter(e.message)
+
+        if len(interest_taxonomy) == 0:
+            raise BadParameter('The query could not retrieve any results, try '
+                               'a different one.')
+    else:
+        try:
+            interest_taxonomy = {l.strip().split('\t')[0].strip(): ''
+                                 for l in open(split_fp, 'U')}
+        except (PlatypusValueError, PlatypusParseError), e:
+            raise BadParameter(e.message)
+
+    try:
+        makedirs(output_fp)
+    except OSError:
+        pass
+
+    interest_fp = open(join(output_fp, 'interest.fna'), 'w')
+    rest_fp = open(join(output_fp, 'rest.fna'), 'w')
+
+    for full_name, seq in MinimalFastaParser(open(seqs_fp, 'U')):
+        name = full_name.strip().split(' ')[0].strip()
+
+        if name in interest_taxonomy:
+            interest_fp.write(">%s\n%s\n" % (full_name, seq))
+        else:
+            rest_fp.write(">%s\n%s\n" % (full_name, seq))
+
+    interest_fp.close()
+    rest_fp.close()

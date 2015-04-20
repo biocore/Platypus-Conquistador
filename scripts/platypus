@@ -9,7 +9,8 @@
 
 import click
 
-from platypus.commands import compare as platy_compare
+from platypus.commands import (compare as platy_compare,
+                               split_db as platy_split_db)
 
 @click.group()
 def platypus():
@@ -18,13 +19,15 @@ def platypus():
 
 FILE_TYPE = click.Path(exists=True, file_okay=True, dir_okay=False,
                        writable=False, readable=True, resolve_path=True)
+FILE_TYPE_OUT = click.Path(exists=False, file_okay=True, dir_okay=False,
+                           writable=True, readable=True, resolve_path=True)
 DIR_TYPE = click.Path(exists=False, file_okay=False, dir_okay=True,
                       writable=True, readable=False, resolve_path=True)
 
 @platypus.command()
 @click.option('--interest_fp', required=True, type=FILE_TYPE,
               help="BLAST results of searching against the database of "
-              "interest.", show_default=True)
+              "interest.")
 @click.option('--other_fp', required=True, type=FILE_TYPE,
               help="BLAST results of searching against the database of "
               "interest.", show_default=True)
@@ -60,9 +63,33 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
                   hits_to_second)
 
 
-@platypus.group()
-def split_db():
-    pass
+@platypus.command()
+@click.option('--tax-fp', required=True, type=FILE_TYPE,
+              help='tab separated file with two columns: name/identifier of '
+              'the sequence and then the taxonomy. Note: the sequence '
+              'identifier is the longest string before a space in the header '
+              'of the sequence.')
+@click.option('--seqs_fp', required=True, type=FILE_TYPE,
+              help='path to a FASTA formatted file to split in interest and '
+              'rest. Note: sequence identifiers must match the ones in the '
+              'taxonomy file.')
+@click.option('--output_fp', required=True, type=FILE_TYPE_OUT,
+              help="Path where the results are saved")
+@click.option('--query', required=False, help='The query used to split the '
+              'database, for example: salmonella. The query should be an exact'
+              ', no wild cards, it is case insensitive and can have spaces')
+@click.option('--split_fp', required=False, type=FILE_TYPE, help='The '
+              'tab-delimited query ile, where each line is a different '
+              'sequence and the first column is the sequence id.')
+def split_db(tax_fp, seqs_fp, output_fp, query, split_fp):
+    """Split a database in parts that match a query and parts that don't"""
+
+    if ((query is None and split_fp is None) or
+        (query is not None and split_fp is not None)):
+        raise BadParameter("You must specify one and only one between query: "
+                           "'%s' and split_fp: '%s'" % (query, split_fp))
+
+    platy_split_db(tax_fp, seqs_fp, query, output_fp, split_fp)
 
 
 if __name__ == '__main__':
