@@ -186,11 +186,6 @@ def split_db(tax_fp, seqs_fp, query, output_fp, split_fp):
         and the first column is the sequence id.
     """
 
-    if ((query is None and split_fp is None) or
-        (query is not None and split_fp is not None)):
-        raise BadParameter("You must specify one and only one between query: "
-                           "'%s' and split_fp: '%s'" % (query, split_fp))
-
     if query is not None:
         # query the taxonomy file for the required sequence identifiers
         try:
@@ -208,6 +203,7 @@ def split_db(tax_fp, seqs_fp, query, output_fp, split_fp):
                                  for l in open(split_fp, 'U')}
         except (PlatypusValueError, PlatypusParseError), e:
             raise BadParameter(e.message)
+
     try:
         makedirs(output_fp)
     except OSError:

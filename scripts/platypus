@@ -75,7 +75,7 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
               'taxonomy file.')
 @click.option('--output_fp', required=True, type=FILE_TYPE_OUT,
               help="Path where the results are saved")
-@click.option('--query', required=True, help='The query used to split the '
+@click.option('--query', required=False, help='The query used to split the '
               'database, for example: salmonella. The query should be an exact'
               ', no wild cards, it is case insensitive and can have spaces')
 @click.option('--split_fp', required=False, type=FILE_TYPE, help='The '
@@ -83,6 +83,12 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
               'sequence and the first column is the sequence id.')
 def split_db(tax_fp, seqs_fp, output_fp, query, split_fp):
     """Split a database in parts that match a query and parts that don't"""
+
+    if ((query is None and split_fp is None) or
+        (query is not None and split_fp is not None)):
+        raise BadParameter("You must specify one and only one between query: "
+                           "'%s' and split_fp: '%s'" % (query, split_fp))
+
     platy_split_db(tax_fp, seqs_fp, query, output_fp, split_fp)
 
 
