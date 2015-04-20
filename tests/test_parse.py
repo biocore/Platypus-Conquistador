@@ -22,7 +22,7 @@ class TopLevelTests(TestCase):
 
         out_total_queries, out_best_hits = parse_first_database(self.db1,
                                                                 [.80], [50])
-        self.assertEquals(out_total_queries, 2)
+        self.assertEquals(out_total_queries, 5)
         self.assertEquals(
             out_best_hits,
             {'HABJ36W02EXF44': [
@@ -36,6 +36,18 @@ class TopLevelTests(TestCase):
                        'subject_id': 'NZ_ABEH01000005_641736102',
                        'bit_score': 959.0, 'percentage_id': 99.22,
                        'alg_length': 512},
+                 'b': {'subject_id': None, 'bit_score': -1}}],
+             'BLANK-TEST-NOT-IN-SECOND': [
+                {'a': {'evalue': 4e-133,
+                       'subject_id': 'NZ_ACZD01000120_647000262',
+                       'bit_score': 482.0, 'percentage_id': 88.79,
+                       'alg_length': 455},
+                 'b': {'subject_id': None, 'bit_score': -1}}],
+             'SAME-RESULT': [
+                {'a': {'evalue': 4e-133,
+                       'subject_id': 'NZ_ACZD01000120_647000262',
+                       'bit_score': 482.0, 'percentage_id': 88.79,
+                       'alg_length': 455},
                  'b': {'subject_id': None, 'bit_score': -1}}]})
 
     def test_parse_second_database(self):
