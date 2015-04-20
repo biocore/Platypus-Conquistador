@@ -32,3 +32,4 @@ pip-log.txt
 #OS X files
 .DS_Store
 
+.ipynb_checkpoints
