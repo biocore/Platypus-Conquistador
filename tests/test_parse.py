@@ -23,7 +23,7 @@ class TopLevelTests(TestCase):
         out_total_queries, out_best_hits = parse_first_database(self.db1,
                                                                 [.80], [50])
         self.assertEquals(out_total_queries, 2)
-        self.assertEqualItems(
+        self.assertEquals(
             out_best_hits,
             {'HABJ36W02EXF44': [
                 {'a': {'evalue': 0.0,
@@ -56,7 +56,7 @@ class TopLevelTests(TestCase):
                 'b': {'subject_id': None, 'bit_score': -1}}]}
 
         parse_second_database(self.db2, best_hits, [0.30], [30])
-        self.assertEqualItems(best_hits, {
+        self.assertEquals(best_hits, {
             'HABJ36W02EXF44': [{
                 'a': {'evalue': 0.0, 'bit_score': 1005.0,
                       'subject_id': 'NZ_ABEH01000018_641736102',
