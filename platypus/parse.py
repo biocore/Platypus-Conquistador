@@ -154,12 +154,10 @@ def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
             # do this step in a different script early in the pipeline
             if subject_id_a not in db_seqs_counts_a:
                 db_seqs_counts_a[subject_id_a] = 0
-                print subject_id_a, db_seqs_counts_b
                 if subject_id_a == db_seqs_counts_b:
                     raise Warning("%s is in both databases" % subject_id_a)
             if subject_id_b not in db_seqs_counts_b:
                 db_seqs_counts_b[subject_id_b] = 0
-                print subject_id_b, db_seqs_counts_a
                 if subject_id_b == db_seqs_counts_a:
                     raise Warning("%s is in both databases" % subject_id_b)
 

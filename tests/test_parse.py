@@ -31,11 +31,11 @@ class TopLevelTests(TestCase):
                        'bit_score': 1005.0, 'percentage_id': 99.42,
                        'alg_length': 519},
                  'b': {'subject_id': None, 'bit_score': -1}}],
-             'HABJ36W02DLDSY': [
-                {'a': {'evalue': 0.0,
-                       'subject_id': 'NZ_ABEH01000005_641736102',
-                       'bit_score': 959.0, 'percentage_id': 99.22,
-                       'alg_length': 512},
+             'SAME-RESULT': [
+                {'a': {'evalue': 4e-133,
+                       'subject_id': 'NZ_ACZD01000120_647000262',
+                       'bit_score': 482.0, 'percentage_id': 88.79,
+                       'alg_length': 455},
                  'b': {'subject_id': None, 'bit_score': -1}}],
              'BLANK-TEST-NOT-IN-SECOND': [
                 {'a': {'evalue': 4e-133,
@@ -43,11 +43,10 @@ class TopLevelTests(TestCase):
                        'bit_score': 482.0, 'percentage_id': 88.79,
                        'alg_length': 455},
                  'b': {'subject_id': None, 'bit_score': -1}}],
-             'SAME-RESULT': [
-                {'a': {'evalue': 4e-133,
-                       'subject_id': 'NZ_ACZD01000120_647000262',
-                       'bit_score': 482.0, 'percentage_id': 88.79,
-                       'alg_length': 455},
+             'HABJ36W02DLDSY': [
+                {'a': {'evalue': 0.0, 'subject_id': 'FQ312003_650377972',
+                       'bit_score': 904.0, 'percentage_id': 97.85,
+                       'alg_length': 512},
                  'b': {'subject_id': None, 'bit_score': -1}}]})
 
     def test_parse_second_database(self):
@@ -69,21 +68,21 @@ class TopLevelTests(TestCase):
 
         parse_second_database(self.db2, best_hits, [0.30], [30])
         self.assertEquals(best_hits, {
-            'HABJ36W02EXF44': [{
-                'a': {'evalue': 0.0, 'bit_score': 1005.0,
-                      'subject_id': 'NZ_ABEH01000018_641736102',
-                      'alg_length': 519, 'percentage_id': 99.42},
-                'b': {'evalue': 4.6, 'subject_id': 'NC_013421_646311947',
-                      'bit_score': 40.1, 'percentage_id': 90.62,
-                      'alg_length': 32}}],
-            'HABJ36W02DLDSY': [{
-                'a': {'evalue': 0.0, 'bit_score': 959.0,
-                      'subject_id': 'NZ_ABEH01000005_641736102',
-                      'alg_length': 512, 'percentage_id': 99.22},
-                'b': {'evalue': 4e-133,
-                      'subject_id': 'NZ_ACZD01000120_647000262',
-                      'bit_score': 482.0, 'percentage_id': 88.79,
-                      'alg_length': 455}}]})
+            'HABJ36W02EXF44': [
+                {'a': {'evalue': 0.0, 'bit_score': 1005.0,
+                       'subject_id': 'NZ_ABEH01000018_641736102',
+                       'alg_length': 519, 'percentage_id': 99.42},
+                 'b': {'evalue': 4.6, 'subject_id': 'NC_013421_646311947',
+                       'bit_score': 40.1, 'percentage_id': 90.62,
+                       'alg_length': 32}}],
+            'HABJ36W02DLDSY': [
+                {'a': {'evalue': 0.0, 'bit_score': 959.0,
+                       'subject_id': 'NZ_ABEH01000005_641736102',
+                       'alg_length': 512, 'percentage_id': 99.22},
+                 'b': {'evalue': 4e-133,
+                       'subject_id': 'NZ_ACZD01000120_647000262',
+                       'bit_score': 500.0, 'percentage_id': 100.0,
+                       'alg_length': 455}}]})
 
     def test_process_results(self):
         """Check results are processed and summarized correctly"""
