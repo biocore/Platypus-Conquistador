@@ -66,7 +66,7 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
 
 
 @platypus.command()
-@click.option('--tax-fp', required=True, type=FILE_TYPE,
+@click.option('--tax_fp', required=True, type=FILE_TYPE,
               help='tab separated file with two columns: name/identifier of '
               'the sequence and then the taxonomy. Note: the sequence '
               'identifier is the longest string before a space in the header '
