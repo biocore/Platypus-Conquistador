@@ -26,14 +26,14 @@ def parse_first_database(db, percentage_ids, alignment_lengths):
     output:
         total_queries: total number of seqs in the db
         best_hits: dict of seqs and hits
-            {'seq_id': 
-                [{ 'a': { 'evalue':%f, 'percentageId':%f, 'bitScore':%f, 
-                          'subjectId':%s, 'algLength':%f }, 
+            {'seq_id':
+                [{ 'a': { 'evalue':%f, 'percentageId':%f, 'bitScore':%f,
+                          'subjectId':%s, 'algLength':%f },
                           'evalue': float(h[evalue]) },
-                   'b': { 'subject_id': None, 'bit_score': -1 }, 
+                   'b': { 'subject_id': None, 'bit_score': -1 },
                    # One element for each combination of %id and alignment length
                 ]
-            } 
+            }
     """
     #@@@ Try blast parser object
     results = MinimalBlastParser9(db)
@@ -51,7 +51,7 @@ def parse_first_database(db, percentage_ids, alignment_lengths):
         evalue = fields.index('e-value')
         subject_id = fields.index('Subject id')
 
-        if not hits: 
+        if not hits:
             continue
 
         best_hits[name] = []
@@ -71,7 +71,7 @@ def parse_first_database(db, percentage_ids, alignment_lengths):
                                        'bit_score': h[bit_score],
                                        'alg_length': int(h[alg_length]),
                                        'evalue': float(h[evalue]) },
-                                'b': { 'subject_id': None, 
+                                'b': { 'subject_id': None,
                                        'bit_score': -1 } }
                     bbs = h[bit_score]
             best_hits[name].append(result)
@@ -85,7 +85,7 @@ def parse_second_database(db, best_hits, percentage_ids_other,
 
     inputs:
         db: filename of the blast results against a database without first
-        best_hits: a dict with the successful results from parse_first_database 
+        best_hits: a dict with the successful results from parse_first_database
         percentage_ids: array with percentage values
         alignment_lengths: array with alignment length values
 
@@ -116,7 +116,7 @@ def parse_second_database(db, best_hits, percentage_ids_other,
                 for h in hits:
                     h[percentage_id] = float(h[percentage_id])
                     h[alg_length] = float(h[alg_length])
-                    h[bit_score] = float(h[bit_score])                                  
+                    h[bit_score] = float(h[bit_score])
                     if h[percentage_id]>=p and h[alg_length]>=a and h[bit_score]>bbs:
                         result =  { 'subject_id': h[subject_id],
                                     'percentage_id': h[percentage_id],
@@ -134,7 +134,7 @@ def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
 
     inputs:
 
-    output: 
+    output:
     """
 
     len_percentage_ids = len(percentage_ids)
@@ -173,7 +173,7 @@ def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
                 results[i]['db_seqs_counts']['b'][vals['b']['subject_id']] += 1
             elif vals['a']['bit_score']>vals['b']['bit_score']:
                 if not vals['b']['subject_id']:
-                    results[i]['perfect_interest'] += 1 
+                    results[i]['perfect_interest'] += 1
                     results[i]['summary'].append('%s\t%s\t' % (seq_name, vals['a']['subject_id']))
                 results[i]['db_seqs_counts']['a'][vals['a']['subject_id']] += 1
             else:
