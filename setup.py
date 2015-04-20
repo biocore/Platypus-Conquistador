@@ -9,12 +9,6 @@
 
 from distutils.core import setup
 
-__author__ = "Antonio Gonzalez Pena"
-__license__ = "GPL"
-__version__ = "0.0.8-dev"
-__maintainer__ = "Antonio Gonzalez Pena"
-__email__ = "antgonza@gmail.com"
-__status__ = "Development"
 
 classes = """
     Development Status :: 5 - Alpha
@@ -37,13 +31,14 @@ test = {"nose >= 0.10.1", "pep8", "flake8"}
 all_deps = base | doc | test
 
 setup(name='platytpus',
-      version=__version__,
+      version='0.0.8-dev',
       description='Platypus Conquistador',
-      author=__author__,
-      author_email=__email__,
-      maintainer=__maintainer__,
-      maintainer_email=__email__,
+      author='Antonio Gonzalez Pena',
+      author_email='antgonza@gmail.com',
+      maintainer='Antonio Gonzalez Pena',
+      maintainer_email='antgonza@gmail.com',
       url='http://github.com/biocore/platypus',
+      license='GPL',
       packages=['platypus'],
       scripts=['scripts/platypus'],
       install_requires=base,
