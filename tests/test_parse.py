@@ -6,14 +6,16 @@ from platypus.parse import (
     parse_first_database, parse_second_database, process_results)
 
 from cogent.util.unit_test import TestCase, main
+from os.path import join, dirname
 
 
 class TopLevelTests(TestCase):
     """ Tests of compare blast databases code """
 
     def setUp(self):
-        self.db1 = open('support_files/first_db.txt', 'r')
-        self.db2 = open('support_files/second_db.txt', 'r')
+        base = join(dirname(__file__), 'support_files')
+        self.db1 = open(join(base, 'first_db.txt'), 'r')
+        self.db2 = open(join(base, 'second_db.txt'), 'r')
 
     def test_parse_first_database(self):
         """Parse first db should build best_hits correctly"""

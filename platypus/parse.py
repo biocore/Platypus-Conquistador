@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # File created on 13 Jul 2013
 from __future__ import division
+from itertools import product, izip
 from cogent.parse.blast import MinimalBlastParser9
 
 
 def parse_first_database(db, percentage_ids, alignment_lengths):
-    """ parses 1st db file and finds the seqs with hits above the given threshold
+    """parses 1st db file and finds the seqs with hits above the given threshold
 
     inputs:
         db: file pointer to 1st database
@@ -20,7 +21,7 @@ def parse_first_database(db, percentage_ids, alignment_lengths):
                           'subjectId':%s, 'algLength':%f },
                    'evalue': float(h[evalue]) },
                    'b': { 'subject_id': None, 'bit_score': -1 },
-                   # One element for each combination of %id and alg length
+                   # One element for each combination of %id and aln length
                 ]
             }
     """
@@ -28,7 +29,7 @@ def parse_first_database(db, percentage_ids, alignment_lengths):
     results = MinimalBlastParser9(db)
 
     # cogent.util.transform.cartesian_product
-    options = [(p, a) for p in percentage_ids for a in alignment_lengths]
+    options = list(product(percentage_ids, alignment_lengths))
 
     best_hits = {}
     for total_queries, (metadata, hits) in enumerate(results):
@@ -96,8 +97,8 @@ def parse_second_database(db, best_hits, percentage_ids_other,
         subject_id = fields.index('Subject id')
 
         if name in best_hits:
-            values = [(p, a) for p in percentage_ids_other for a in
-                      alignment_lengths_other]
+            values = list(product(percentage_ids_other,
+                                  alignment_lengths_other))
             for i, (p, a) in enumerate(values):
                 if not best_hits[name][i]:
                     continue
@@ -136,14 +137,11 @@ def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
     len_alignment_lengths = len(alignment_lengths)
     results = []
 
-    values = [(i, j) for i in range(len_percentage_ids) for j in
-              range(len_alignment_lengths)]
-    for i, j in values:
-        filename = "p1_%d-a1_%d_p2_%d-a2_%d" % (
-            percentage_ids[i],
-            alignment_lengths[j],
-            percentage_ids_other[i],
-            alignment_lengths_other[j])
+    iter_a = product(percentage_ids, alignment_lengths)
+    iter_b = product(percentage_ids_other, alignment_lengths_other)
+    for (perc_id_a, aln_len_a), (perc_id_b, aln_len_b) in izip(iter_a, iter_b):
+        filename = "p1_%d-a1_%d_p2_%d-a2_%d" % (perc_id_a, aln_len_a,
+                                                perc_id_b, aln_len_b)
         results.append({
             'filename': filename,
             'db_interest': 0,

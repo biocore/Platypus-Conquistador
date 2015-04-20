@@ -136,7 +136,7 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
                             key=itemgetter(1), reverse=True)
 
             filename = join(output_dir, "hits_to_first_db_" + item['filename']
-                            + ".txt")
+                                        + ".txt")
 
             with open(filename, 'w') as fd:
                 fd.write('\n'.join(['%s\t%d' % (k, v)
@@ -147,7 +147,7 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
                             key=itemgetter(1), reverse=True)
 
             filename = join(output_dir, "hits_to_second_db_" + item['filename']
-                            + ".txt")
+                                        + ".txt")
 
             with open(filename, 'w') as fd:
                 fd.write('\n'.join(['%s: %d' %
