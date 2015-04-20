@@ -29,7 +29,7 @@ def parse_first_database(db, percentage_ids, alignment_lengths):
     results = MinimalBlastParser9(db)
 
     # cogent.util.transform.cartesian_product
-    options = list(product(percentage_ids, alignment_lengths))
+    options = product(percentage_ids, alignment_lengths)
 
     best_hits = {}
     for total_queries, (metadata, hits) in enumerate(results):
@@ -97,8 +97,7 @@ def parse_second_database(db, best_hits, percentage_ids_other,
         subject_id = fields.index('Subject id')
 
         if name in best_hits:
-            values = list(product(percentage_ids_other,
-                                  alignment_lengths_other))
+            values = product(percentage_ids_other, alignment_lengths_other)
             for i, (p, a) in enumerate(values):
                 if not best_hits[name][i]:
                     continue
@@ -132,9 +131,6 @@ def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
 
     output:
     """
-
-    len_percentage_ids = len(percentage_ids)
-    len_alignment_lengths = len(alignment_lengths)
     results = []
 
     iter_a = product(percentage_ids, alignment_lengths)
