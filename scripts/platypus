@@ -83,7 +83,7 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
               'database, for example: salmonella. The query should be an exact'
               ', no wild cards, it is case insensitive and can have spaces')
 @click.option('--split_fp', required=False, type=FILE_TYPE, help='The '
-              'tab-delimited query ile, where each line is a different '
+              'tab-delimited query file, where each line is a different '
               'sequence and the first column is the sequence id.')
 def split_db(tax_fp, seqs_fp, output_fp, query, split_fp):
     """Split a database in parts that match a query and parts that don't"""
