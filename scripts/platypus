@@ -1,0 +1,69 @@
+#!/usr/bin/env python
+# ----------------------------------------------------------------------------
+# Copyright (c) 2015--, platypus development team.
+#
+# Distributed under the terms of the GPL License.
+#
+# The full license is in the file COPYING.txt, distributed with this software.
+# ----------------------------------------------------------------------------
+
+import click
+
+from platypus.commands import compare as platy_compare
+
+@click.group()
+def platypus():
+    "Platypus Conquistador: verify taxonomic identifications"
+    pass
+
+FILE_TYPE = click.Path(exists=True, file_okay=True, dir_okay=False,
+                       writable=False, readable=True, resolve_path=True)
+DIR_TYPE = click.Path(exists=False, file_okay=False, dir_okay=True,
+                      writable=True, readable=False, resolve_path=True)
+
+@platypus.command()
+@click.option('--interest_fp', required=True, type=FILE_TYPE,
+              help="BLAST results of searching against the database of "
+              "interest.", show_default=True)
+@click.option('--other_fp', required=True, type=FILE_TYPE,
+              help="BLAST results of searching against the database of "
+              "interest.", show_default=True)
+@click.option('--output_dir', required=False, type=DIR_TYPE,
+              help="Outpud directory file path", show_default=True)
+@click.option('--interest_pcts', required=False, type=click.IntRange(0, None),
+              multiple=True, show_default=True, help='Minimum percentage '
+              'identity to be considered as a valid result in the interest '
+              'database search results.', default=70)
+@click.option('--interest_alg_lengths', required=False, show_default=True,
+              type=click.IntRange(0, None), multiple=True,
+              help='Minimum alginment length to be considered a valid result '
+              'in the interest database search results', default=50)
+@click.option('--other_pcts', required=False, type=click.IntRange(0, None),
+              show_default=True, multiple=True, help='Minimum percentage '
+              'identity to be considered as a valid result in the other '
+              'database search results.', default=70)
+@click.option('--other_alg_lengths', required=False,
+              type=click.IntRange(0, None), multiple=True, show_default=True,
+              help='Minimum alginment length to be considered a valid result '
+              'in the other database search results', default=50)
+@click.option('--hits_to_first', required=False, is_flag=True, default=False,
+              help='Outputs the labels and counts of the sequences being hit '
+              'in the first database.', show_default=True)
+@click.option('--hits_to_second', required=False, is_flag=True, default=False,
+              help='Outputs the labels and counts of the sequences being hit '
+              'in the second database.', show_default=True)
+def compare(interest_fp, other_fp, output_dir='blast-results-compare',
+            interest_pcts=None, interest_alg_lens=None, other_pcts=None,
+            other_alg_lens=None, hits_to_first=None, hits_to_second=None):
+    platy_compare(interest_fp, other_fp, output_dir, interest_pcts,
+                  interest_alg_lens, other_pcts, other_alg_lens, hits_to_first,
+                  hits_to_second)
+
+
+@platypus.group()
+def split_db():
+    pass
+
+
+if __name__ == '__main__':
+    platypus()

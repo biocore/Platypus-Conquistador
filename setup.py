@@ -1,55 +1,50 @@
 #!/usr/bin/env python
+# ----------------------------------------------------------------------------
+# Copyright (c) 2015--, platypus development team.
+#
+# Distributed under the terms of the GPL License.
+#
+# The full license is in the file COPYING.txt, distributed with this software.
+# ----------------------------------------------------------------------------
 
 from distutils.core import setup
-from glob import glob
 
-__author__ = "Antonio Gonzalez Pena"
-__copyright__ = "Copyright 2011-2013, The Platypus Project"
-__credits__ = ["Antonio Gonzalez Pena",]
-__license__ = "GPL"
-__version__ = "0.0.8-dev"
-__maintainer__ = "Antonio Gonzalez Pena"
-__email__ = "antgonza@gmail.com"
-__status__ = "Development"
 
-# without any of these platypus will not function correctly
-required_python_modules = ['qiime'] # qcli will be added later
-unavailable_dependencies = []
-
-for module in required_python_modules:
-    try:
-        exec 'import %s' % module
-    except ImportError:
-        unavailable_dependencies.append(module)
-
-if unavailable_dependencies:
-    print ('Cannot find the following python package(s): %s. Check your '
-        'PYTHONPATH environment variable and/or site-packages folder.' %
-        ', '.join(unavailable_dependencies))
-    exit(1)
-
-# slightly modified from the biom-format setup.py script
-qiime_version = tuple(map(int, qiime.__version__.replace('-dev','').split('.')))
-if qiime_version < (1, 7, 0):
-    print ('The minimum required version of the QIIME libraries is 1.7.0 '
-        'please update your version accordingly (your current version %s).' %
-        qiime.__version__)
-    exit(2)
-
-long_description = """Platypus Conquistador: Confirming specific taxonomic groups within your samples.
+classes = """
+    Development Status :: 5 - Alpha
+    License :: OSI Approved :: GPL
+    Topic :: Software Development :: Libraries :: Application Frameworks
+    Programming Language :: Python
+    Programming Language :: Python :: 2.7
+    Programming Language :: Python :: Implementation :: CPython
+    Operating System :: OS Independent
+    Operating System :: POSIX
+    Operating System :: MacOS :: MacOS X
 """
+classifiers = [s.strip() for s in classes.split('\n') if s]
+
+long_description = ("Platypus Conquistador: Confirming specific taxonomic "
+                    "groups within your metagenomic samples.")
+
+base = {"click", "scikit-bio >= 0.2.1, < 0.3.0", 'cogent'}
+test = {"nose >= 0.10.1", "pep8", "flake8"}
+all_deps = base | doc | test
 
 setup(name='platytpus',
-        version=__version__,
-        description='Platypus Conquistador',
-        author="Antonio Gonzalez Pena",
-        author_email=__email__,
-        maintainer=__maintainer__,
-        maintainer_email=__email__,
-        url='http://github.com/qiime/platypus',
-        packages=['platypus'],
-        scripts=glob('scripts/*py'),
-        package_data={},
-        data_files={},
-        long_description=long_description)
+      version='0.0.8-dev',
+      description='Platypus Conquistador',
+      author='Antonio Gonzalez Pena',
+      author_email='antgonza@gmail.com',
+      maintainer='Antonio Gonzalez Pena',
+      maintainer_email='antgonza@gmail.com',
+      url='http://github.com/biocore/platypus',
+      license='GPL',
+      packages=['platypus'],
+      scripts=['scripts/platypus'],
+      install_requires=base,
+      extras_require={'test': test, 'all': all_deps},
+      package_data={},
+      data_files={},
+      long_description=long_description,
+      classifiers=classifiers)
 
