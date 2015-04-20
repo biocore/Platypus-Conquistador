@@ -57,10 +57,6 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
         length.
         If the `interest_alg_lens` and the `other_alg_lens` lists are of
         different length.
-
-    Notes
-    -----
-    Antonio, can you think of some notes.
     """
 
     if interest_pcts is None:
@@ -128,7 +124,7 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
         combined_results[4].append(str(item['equal']))
         combined_results[5].append(str(no_hits))
 
-        # Printing count of hits to the db
+        # saving count of hits to the db
         if hits_to_first:
             s_hits = sorted(item['db_seqs_counts']['a'].items(),
                             key=itemgetter(1), reverse=True)
@@ -151,7 +147,7 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
                 fd.write('\n'.join(['%s: %d' %
                                     (k, v) for k, v in s_hits if v != 0]))
 
-    #Printing collated results
+    # saving collated results
     with open(join(output_dir, "compile_output.txt"), 'w') as compiled_output:
         compiled_output.write('\n'.join(['\t'.join(item)
                                          for item in combined_results]))

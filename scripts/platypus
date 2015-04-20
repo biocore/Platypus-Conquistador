@@ -23,10 +23,10 @@ DIR_TYPE = click.Path(exists=False, file_okay=False, dir_okay=True,
 
 @platypus.command()
 @click.option('--interest_fp', required=True, type=FILE_TYPE,
-              help="BLAST results when searching against the database of "
+              help="BLAST results of searching against the database of "
               "interest.", show_default=True)
 @click.option('--other_fp', required=True, type=FILE_TYPE,
-              help="BLAST results when searching against the database of "
+              help="BLAST results of searching against the database of "
               "interest.", show_default=True)
 @click.option('--output_dir', required=False, type=DIR_TYPE,
               help="Outpud directory file path", show_default=True)

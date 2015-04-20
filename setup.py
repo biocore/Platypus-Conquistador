@@ -30,10 +30,9 @@ classes = """
 classifiers = [s.strip() for s in classes.split('\n') if s]
 
 long_description = ("Platypus Conquistador: Confirming specific taxonomic "
-                    "groups within your samples.")
+                    "groups within your metagenomic samples.")
 
-base = {"numpy >= 1.7", "click", "scikit-bio >= 0.2.1, < 0.3.0"}
-doc = {"Sphinx >= 1.2.2", "sphinx-bootstrap-theme"}
+base = {"click", "scikit-bio >= 0.2.1, < 0.3.0"}
 test = {"nose >= 0.10.1", "pep8", "flake8"}
 all_deps = base | doc | test
 
@@ -48,7 +47,7 @@ setup(name='platytpus',
       packages=['platypus'],
       scripts=['scripts/platypus'],
       install_requires=base,
-      extras_require={'doc': doc, 'test': test, 'all': all_deps},
+      extras_require={'test': test, 'all': all_deps},
       package_data={},
       data_files={},
       long_description=long_description,
