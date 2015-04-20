@@ -14,10 +14,11 @@ from click import BadParameter
 from skbio.util import create_dir
 from cogent.parse.fasta import MinimalFastaParser
 
-from platypus.compare import (sequences_from_query, PlatypusParseError,
-    PlatypusValueError)
+from platypus.compare import (
+    sequences_from_query, PlatypusParseError, PlatypusValueError)
 from platypus.parse import (parse_first_database, parse_second_database,
                             process_results)
+
 
 def compare(interest_fp, other_fp, output_dir='blast-results-compare',
             interest_pcts=None, interest_alg_lens=None, other_pcts=None,
@@ -134,8 +135,8 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
             s_hits = sorted(item['db_seqs_counts']['a'].items(),
                             key=itemgetter(1), reverse=True)
 
-            filename = join(output_dir, "hits_to_first_db_" + item['filename']
-                            + ".txt")
+            filename = join(output_dir,
+                            "hits_to_first_db_%s.txt" % item['filename'])
 
             with open(filename, 'w') as fd:
                 fd.write('\n'.join(['%s\t%d' % (k, v)
@@ -145,8 +146,8 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
             s_hits = sorted(item['db_seqs_counts']['b'].items(),
                             key=itemgetter(1), reverse=True)
 
-            filename = join(output_dir, "hits_to_second_db_" + item['filename']
-                            + ".txt")
+            filename = join(output_dir,
+                            "hits_to_second_db_%s.txt" % item['filename'])
 
             with open(filename, 'w') as fd:
                 fd.write('\n'.join(['%s: %d' %
