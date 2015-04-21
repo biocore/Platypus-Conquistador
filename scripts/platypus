@@ -46,11 +46,13 @@ DIR_TYPE = click.Path(exists=False, file_okay=False, dir_okay=True,
 @click.option('--other_pcts', required=False, type=click.IntRange(0, None),
               show_default=True, multiple=True, help='Minimum percentage '
               'identity to be considered as a valid result in the other '
-              'database search results.', default=70)
+              'database search results. If None is passed the values from '
+              '--interest_pcts will be used.', default=None)
 @click.option('--other_alg_lengths', required=False,
               type=click.IntRange(0, None), multiple=True, show_default=True,
               help='Minimum alginment length to be considered a valid result '
-              'in the other database search results', default=50)
+              'in the other database search results. If None is passed the '
+              'values from --interest_alg_lengths will be used.', default=None)
 @click.option('--hits_to_first', required=False, is_flag=True, default=False,
               help='Outputs the labels and counts of the sequences being hit '
               'in the first database.', show_default=True)
@@ -66,7 +68,7 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
 
 
 @platypus.command()
-@click.option('--tax-fp', required=True, type=FILE_TYPE,
+@click.option('--tax_fp', required=True, type=FILE_TYPE,
               help='tab separated file with two columns: name/identifier of '
               'the sequence and then the taxonomy. Note: the sequence '
               'identifier is the longest string before a space in the header '
@@ -81,7 +83,7 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
               'database, for example: salmonella. The query should be an exact'
               ', no wild cards, it is case insensitive and can have spaces')
 @click.option('--split_fp', required=False, type=FILE_TYPE, help='The '
-              'tab-delimited query ile, where each line is a different '
+              'tab-delimited query file, where each line is a different '
               'sequence and the first column is the sequence id.')
 def split_db(tax_fp, seqs_fp, output_fp, query, split_fp):
     """Split a database in parts that match a query and parts that don't"""
