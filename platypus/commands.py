@@ -12,7 +12,7 @@ from os import makedirs
 
 from click import BadParameter
 from skbio.util import create_dir
-from cogent.parse.fasta import MinimalFastaParser
+from skbio import parse_fasta
 
 from platypus.compare import (
     sequences_from_query, PlatypusParseError, PlatypusValueError)
@@ -94,7 +94,7 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
         other_alg_lens = interest_alg_lens
 
     # process databases
-    total_queries, best_hits = parse_first_database(db_a, interest_pcts,
+    total_queries, best_hits = parse_first_database(db_a, interest_pcts, 
                                                     interest_alg_lens)
     parse_second_database(db_b, best_hits, other_pcts,
                           other_alg_lens)
@@ -212,7 +212,7 @@ def split_db(tax_fp, seqs_fp, query, output_fp, split_fp):
     interest_fp = open(join(output_fp, 'interest.fna'), 'w')
     rest_fp = open(join(output_fp, 'rest.fna'), 'w')
 
-    for full_name, seq in MinimalFastaParser(open(seqs_fp, 'U')):
+    for full_name, seq in parse_fasta(seqs_fp):
         name = full_name.strip().split(' ')[0].strip()
 
         if name in interest_taxonomy:

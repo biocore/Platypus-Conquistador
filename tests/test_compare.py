@@ -6,7 +6,7 @@ from platypus.compare import (
     sequences_from_query, PlatypusParseError, PlatypusValueError)
 
 from os.path import dirname, join, abspath
-from cogent.util.unit_test import TestCase, main
+from unittest import TestCase, main
 
 
 class TopLevelTests(TestCase):

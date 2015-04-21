@@ -2,7 +2,72 @@
 # File created on 13 Jul 2013
 from __future__ import division
 from itertools import product, izip
-from cogent.parse.blast import MinimalBlastParser9
+from collections import namedtuple
+
+
+def parse_m9(lines_or_fp):
+    """Parse m9 formatted tabular data
+
+    Parameters
+    ----------
+    lines : iterable of str, or a filepath
+        The lines to parse. It is expected that these lines are in BLAST m9
+        format, or comparable. Any additional columns will be ignored
+
+    Returns
+    -------
+    list of namedtuple
+        The namedtuples describe each field of the m9 format per record.
+    """
+    header = (('query', str), 
+              ('subject', str),
+              ('percent_id', float), 
+              ('aln_length', int),
+              ('mismatches', int),
+              ('gapopenings', int),
+              ('q_start', int),
+              ('q_end', int),
+              ('s_start', int),
+              ('s_end', int), 
+              ('evalue', float), 
+              ('bitscore', float))
+    m9 = namedtuple('m9', [h[0] for h in header])
+    
+    if isinstance(lines_or_fp, str):
+        lines_or_fp = open(lines_or_fp)
+    
+    res = []
+    hits = []
+    start_of_record = False
+    for line in lines_or_fp:
+        if line.startswith('# Fields'):
+            start_of_record = True
+            if hits:
+                res.append((hits[0].query, hits))
+                hits = []
+            continue
+
+        if line.startswith('# BLASTN') and start_of_record:
+            # We have an empty record
+            res.append((None, m9(**{h: None for h, _ in header})))
+            continue
+
+        if line.startswith('#'):
+            continue
+        
+        start_of_record = False
+        parts = line.strip().split('\t')
+        
+        if len(parts) < 12:
+            raise ValueError("Unexpected number of fields found")
+
+        hits.append(m9(**{h: c(v) for (h, c), v in zip(header, parts[:12])}))
+    
+    if hits:
+        res.append((hits[0].query, hits))
+        hits = []
+
+    return res
 
 
 def parse_first_database(db, percentage_ids, alignment_lengths):
@@ -26,48 +91,36 @@ def parse_first_database(db, percentage_ids, alignment_lengths):
             }
     """
     # try blast parser object
-    results = MinimalBlastParser9(db)
+    results = parse_m9(db)
 
     options = list(product(percentage_ids, alignment_lengths))
 
     best_hits = {}
-    for total_queries, (metadata, hits) in enumerate(results):
-        fields = [i.strip() for i in metadata['FIELDS'].split(',')]
-        name = metadata['QUERY']
-        percentage_id = fields.index('% identity')
-        bit_score = fields.index('bit score')
-        alg_length = fields.index('alignment length')
-        evalue = fields.index('e-value')
-        subject_id = fields.index('Subject id')
-
-        if not hits:
+    for total_queries, (query, hits) in enumerate(results, 1):
+        if query is None:
             continue
 
-        best_hits[name] = []
+        best_hits[query] = []
         for p, a in options:
             # best bit score
             bbs = 0
             result = None
 
             for h in hits:
-                h[percentage_id] = float(h[percentage_id])
-                h[alg_length] = float(h[alg_length])
-                h[bit_score] = float(h[bit_score])
-
-                valid = (h[percentage_id] >= p and h[alg_length] >= a and
-                         h[bit_score] > bbs)
+                valid = (h.percent_id >= p and h.aln_length >= a and
+                         h.bitscore > bbs)
                 if valid:
-                    result = {'a': {'subject_id': h[subject_id],
-                                    'percentage_id': h[percentage_id],
-                                    'bit_score': h[bit_score],
-                                    'alg_length': int(h[alg_length]),
-                                    'evalue': float(h[evalue])},
+                    result = {'a': {'subject_id': h.subject,
+                                    'percentage_id': h.percent_id,
+                                    'bit_score': h.bitscore,
+                                    'alg_length': h.aln_length,
+                                    'evalue': h.evalue},
                               'b': {'subject_id': None,
                                     'bit_score': -1}}
-                    bbs = h[bit_score]
-            best_hits[name].append(result)
+                    bbs = h.bitscore
+            best_hits[query].append(result)
 
-    return total_queries+1, best_hits
+    return total_queries, best_hits
 
 
 def parse_second_database(db, best_hits, percentage_ids_other,
@@ -83,41 +136,33 @@ def parse_second_database(db, best_hits, percentage_ids_other,
     output:
         None: the command modifies best_hits, section b
     """
-    results = MinimalBlastParser9(db)
+    results = parse_m9(db)
 
     # create function to return results
-    for metadata, hits in results:
-        fields = [i.strip() for i in metadata['FIELDS'].split(',')]
-        name = metadata['QUERY']
-        percentage_id = fields.index('% identity')
-        bit_score = fields.index('bit score')
-        alg_length = fields.index('alignment length')
-        evalue = fields.index('e-value')
-        subject_id = fields.index('Subject id')
+    for query, hits in results:
+        if query is None:
+            continue
 
-        if name in best_hits:
+        if query in best_hits:
             values = product(percentage_ids_other, alignment_lengths_other)
             for i, (p, a) in enumerate(values):
-                if not best_hits[name][i]:
+                if not best_hits[query][i]:
                     continue
                 # best bit score
                 bbs = 0
                 result = None
                 for h in hits:
-                    h[percentage_id] = float(h[percentage_id])
-                    h[alg_length] = float(h[alg_length])
-                    h[bit_score] = float(h[bit_score])
-                    valid = (h[percentage_id] >= p and h[alg_length] >= a and
-                             h[bit_score] > bbs)
+                    valid = (h.percent_id >= p and h.aln_length >= a and
+                             h.bitscore > bbs)
                     if valid:
-                        result = {'subject_id': h[subject_id],
-                                  'percentage_id': h[percentage_id],
-                                  'bit_score': h[bit_score],
-                                  'alg_length': int(h[alg_length]),
-                                  'evalue': float(h[evalue])}
-                        bbs = h[bit_score]
+                        result = {'subject_id': h.subject,
+                                  'percentage_id': h.percent_id,
+                                  'bit_score': h.bitscore,
+                                  'alg_length': h.aln_length,
+                                  'evalue': h.evalue}
+                        bbs = h.bitscore
                 if result:
-                    best_hits[name][i]['b'] = result
+                    best_hits[query][i]['b'] = result
 
 
 def process_results(percentage_ids, alignment_lengths, percentage_ids_other,

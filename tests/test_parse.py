@@ -5,7 +5,7 @@ from __future__ import division
 from platypus.parse import (
     parse_first_database, parse_second_database, process_results)
 
-from cogent.util.unit_test import TestCase, main
+from unittest import TestCase, main
 from os.path import join, dirname
 
 
