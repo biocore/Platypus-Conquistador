@@ -101,8 +101,7 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
 
     # parse results
     results = process_results(interest_pcts, interest_alg_lens,
-                              other_pcts, other_alg_lens, best_hits,
-                              interest_fp, other_fp)
+                              other_pcts, other_alg_lens, best_hits)
 
     # Collating output and writing full results
     for i, item in enumerate(results):
