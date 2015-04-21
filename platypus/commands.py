@@ -5,6 +5,7 @@
 #
 # The full license is in the file COPYING.txt, distributed with this software.
 # ----------------------------------------------------------------------------
+from __future__ import division
 
 from os.path import join, basename
 from operator import itemgetter
