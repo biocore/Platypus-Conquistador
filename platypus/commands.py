@@ -9,7 +9,6 @@ from __future__ import division
 
 from os.path import join, basename
 from operator import itemgetter
-from os import makedirs
 
 from click import BadParameter
 from skbio.util import create_dir
@@ -205,10 +204,7 @@ def split_db(tax_fp, seqs_fp, query, output_fp, split_fp):
         if not interest_taxonomy:
             raise BadParameter('The split_fp is empty!')
 
-    try:
-        makedirs(output_fp)
-    except OSError:
-        pass
+    create_dir(output_fp, False)
 
     interest_fp = open(join(output_fp, 'interest.fna'), 'w')
     rest_fp = open(join(output_fp, 'rest.fna'), 'w')
