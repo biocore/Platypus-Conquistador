@@ -1,0 +1,5 @@
+filename	p1_70-a1_50_p2_70-a2_50
+interest db (first_db.txt)	0
+other db (second_db.txt)	0
+only interest	2
+both dbs	0

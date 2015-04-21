@@ -98,6 +98,8 @@ def parse_second_database(db, best_hits, percentage_ids_other,
         if name in best_hits:
             values = product(percentage_ids_other, alignment_lengths_other)
             for i, (p, a) in enumerate(values):
+                if not best_hits[name][i]:
+                    continue
                 # best bit score
                 bbs = 0
                 result = None
@@ -146,6 +148,8 @@ def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
     for seq_name, values in best_hits.items():
         seq_name = seq_name.split(' ')[0].strip()
         for i, vals in enumerate(values):
+            if not vals:
+                continue
             subject_id_a = vals['a']['subject_id']
             subject_id_b = vals['b']['subject_id']
             db_seqs_counts_a = results[i]['db_seqs_counts']['a']

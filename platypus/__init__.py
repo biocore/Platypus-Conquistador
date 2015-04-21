@@ -10,4 +10,4 @@ __maintainer__ = "Antonio Gonzalez Pena"
 __email__ = "antgonza@gmail.com"
 __status__ = "Development"
 
-__all__ = ['compare', 'parse']
+__all__ = ['commands', 'compare', 'parse']

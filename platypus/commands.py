@@ -6,7 +6,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 # ----------------------------------------------------------------------------
 
-from os.path import join
+from os.path import join, basename
 from operator import itemgetter
 from os import makedirs
 
@@ -113,8 +113,9 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
         if i == 0:
             combined_results = []
             combined_results.append(['filename'])
-            combined_results.append(['interestdb (%s)' % interest_fp])
-            combined_results.append(['other db (%s)' % other_fp])
+            combined_results.append(['interest db (%s)' %
+                                     basename(interest_fp)])
+            combined_results.append(['other db (%s)' % basename(other_fp)])
             combined_results.append(['only interest'])
             combined_results.append(['both dbs'])
             combined_results.append(['no hits in interest db'])
@@ -129,28 +130,22 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
         combined_results[4].append(str(item['equal']))
         combined_results[5].append(str(no_hits))
 
-        # saving count of hits to the db
-        if hits_to_first:
-            s_hits = sorted(item['db_seqs_counts']['a'].items(),
-                            key=itemgetter(1), reverse=True)
+        # tiny helper function to save hits files
+        def save_hits(data, name):
 
-            filename = join(output_dir,
-                            "hits_to_first_db_%s.txt" % item['filename'])
-
+            s_hits = sorted(data, key=itemgetter(1), reverse=True)
+            filename = join(output_dir, name)
             with open(filename, 'w') as fd:
                 fd.write('\n'.join(['%s\t%d' % (k, v)
                                     for k, v in s_hits if v != 0]))
 
+        if hits_to_first:
+            save_hits(item['db_seqs_counts']['a'].items(),
+                      "hits_to_first_db_%s.txt" % item['filename'])
+
         if hits_to_second:
-            s_hits = sorted(item['db_seqs_counts']['b'].items(),
-                            key=itemgetter(1), reverse=True)
-
-            filename = join(output_dir,
-                            "hits_to_second_db_%s.txt" % item['filename'])
-
-            with open(filename, 'w') as fd:
-                fd.write('\n'.join(['%s: %d' %
-                                    (k, v) for k, v in s_hits if v != 0]))
+            save_hits(item['db_seqs_counts']['b'].items(),
+                      "hits_to_second_db_%s.txt" % item['filename'])
 
     # saving collated results
     with open(join(output_dir, "compile_output.txt"), 'w') as compiled_output:
@@ -184,6 +179,12 @@ def split_db(tax_fp, seqs_fp, query, output_fp, split_fp):
     split_fp : str
         The tab delimited query file, where each line is a different sequence
         and the first column is the sequence id.
+
+    Raises
+    ------
+    BadParameter
+        If the Taxonomy file is empty.
+        If the query you passed retrieved no results.
     """
 
     if query is not None:
@@ -198,11 +199,10 @@ def split_db(tax_fp, seqs_fp, query, output_fp, split_fp):
             raise BadParameter('The query could not retrieve any results, try '
                                'a different one.')
     else:
-        try:
-            interest_taxonomy = {l.strip().split('\t')[0].strip(): ''
-                                 for l in open(split_fp, 'U')}
-        except (PlatypusValueError, PlatypusParseError), e:
-            raise BadParameter(e.message)
+        interest_taxonomy = {l.strip().split('\t')[0].strip(): ''
+                             for l in open(split_fp, 'U')}
+        if not interest_taxonomy:
+            raise BadParameter('The split_fp is empty!')
 
     try:
         makedirs(output_fp)

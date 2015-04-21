@@ -11,8 +11,8 @@ from distutils.core import setup
 
 
 classes = """
-    Development Status :: 5 - Alpha
-    License :: OSI Approved :: GPL
+    Development Status :: 2 - Pre-Alpha
+    License :: OSI Approved :: GNU General Public License v3 (GPLv3)
     Topic :: Software Development :: Libraries :: Application Frameworks
     Programming Language :: Python
     Programming Language :: Python :: 2.7
@@ -30,7 +30,7 @@ base = {"click", "scikit-bio >= 0.2.1, < 0.3.0", 'cogent'}
 test = {"nose >= 0.10.1", "pep8", "flake8"}
 all_deps = base | test
 
-setup(name='platytpus',
+setup(name='platytpus-conquistador',
       version='0.0.8-dev',
       description='Platypus Conquistador',
       author='Antonio Gonzalez Pena',
