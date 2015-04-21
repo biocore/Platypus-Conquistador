@@ -29,6 +29,6 @@ parallel_blast.py -O 2 -n 10 -w 11 -e .1 -r databases/interest.fna -i splitLib/s
 ```
 
 Now we should have two files with the results of BLASTing against the interest and the rest databases. Consequently, we can use these resulting files to compare the results and confirm the presence/absence of Salmonella in our files. In the example command, we are using different levels of similarity: 80, 85, 90, 95, 100, and different lengths for the alignment: 80, 100.
-`platypus compare --other_fp blastOut/rest/seqs_blast_out.txt --interest_fp blastOut/interest/seqs_blast_out.txt --interest_pcts 80 --interest_pcts 85 --interest_pcts 90 --interest_pcts 95 --interest_pcts 100 --interest_alg_lengths 80 --interest_alg_lengths 100 -o compare`
+`platypus compare --other_fp blastOut/rest/seqs_blast_out.txt --interest_fp blastOut/interest/seqs_blast_out.txt --interest_pcts 80 --interest_pcts 85 --interest_pcts 90 --interest_pcts 95 --interest_pcts 100 --interest_alg_lens 80 --interest_alg_lens 100 --output_dir compare`
 
 This last step will create several files with the summary of each combination of options (% identity, and alignment length), each summary will have the sequences that matched at any given level and two compiled results: compile_output_no_nohits.txt, results without those sequences that weren't found in the first DB, and compile_output.txt, all results.
