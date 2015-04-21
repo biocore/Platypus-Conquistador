@@ -104,7 +104,16 @@ class TestCompare(TestCase):
                 self.assertItemsEqual(exp.readlines(), out.readlines())
 
     def test_compare_exceptions(self):
-        pass
+        temp_dir = gettempdir()
+        self.to_delete.append(temp_dir)
+
+        with self.assertRaises(BadParameter):
+            compare(self.interest_fp, self.other_fp, temp_dir,
+                    interest_pcts=(50, 55), other_pcts=(100,))
+
+        with self.assertRaises(BadParameter):
+            compare(self.interest_fp, self.other_fp, temp_dir,
+                    interest_alg_lens=(20,), other_alg_lens=(100, 10))
 
 
 if __name__ == '__main__':
