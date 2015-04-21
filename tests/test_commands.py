@@ -6,13 +6,13 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 # ----------------------------------------------------------------------------
 
-from os.path import join, dirname, exists, abspath
+from os.path import join, dirname, abspath
 from shutil import rmtree
 from tempfile import gettempdir
 from unittest import TestCase, main
 from click import BadParameter
 
-from platypus.commands import compare, split_db
+from platypus.commands import split_db
 
 
 class TestCommands(TestCase):
@@ -68,7 +68,7 @@ class TestCommands(TestCase):
         out_rest = join(temp_dir, 'rest.fna')
 
         with open(exp_interest) as exp, open(out_interest) as out:
-           self.assertItemsEqual(exp.readlines(), out.readlines())
+            self.assertItemsEqual(exp.readlines(), out.readlines())
 
         with open(exp_rest) as exp, open(out_rest) as out:
             self.assertItemsEqual(exp.readlines(), out.readlines())
