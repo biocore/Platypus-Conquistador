@@ -73,6 +73,7 @@ class TestSplitDB(TestCase):
         with open(exp_rest) as exp, open(out_rest) as out:
             self.assertItemsEqual(exp.readlines(), out.readlines())
 
+
 class TestCompare(TestCase):
     def setUp(self):
         self.base = abspath(join(dirname(__file__), 'support_files'))
@@ -123,9 +124,9 @@ class TestCompare(TestCase):
                 hits_to_second=True)
 
         files = ['compile_output.txt', 'compile_output_no_nohits.txt',
-                'hits_to_first_db_p1_70-a1_50_p2_70-a2_50.txt',
-                'hits_to_second_db_p1_70-a1_50_p2_70-a2_50.txt',
-                'summary_p1_70-a1_50_p2_70-a2_50.txt']
+                 'hits_to_first_db_p1_70-a1_50_p2_70-a2_50.txt',
+                 'hits_to_second_db_p1_70-a1_50_p2_70-a2_50.txt',
+                 'summary_p1_70-a1_50_p2_70-a2_50.txt']
 
         for fp in files:
             exp_fp = join(self.base, 'compare-tests', fp)
