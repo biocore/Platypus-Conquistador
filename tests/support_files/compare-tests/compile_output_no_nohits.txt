@@ -1,0 +1,5 @@
+filename	p1_70-a1_50_p2_70-a2_50
+interestdb (/Users/yoshikivazquezbaeza/git_sw/platypus/tests/support_files/second_db.txt)	0
+other db (/Users/yoshikivazquezbaeza/git_sw/platypus/tests/support_files/first_db.txt)	1
+only interest	0
+both dbs	0
