@@ -12,7 +12,7 @@ from tempfile import gettempdir
 from unittest import TestCase, main
 from click import BadParameter
 
-from platypus.commands import split_db
+from platypus.commands import split_db, compare
 
 
 class TestSplitDB(TestCase):

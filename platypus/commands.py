@@ -6,7 +6,7 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 # ----------------------------------------------------------------------------
 
-from os.path import join
+from os.path import join, basename
 from operator import itemgetter
 from os import makedirs
 
@@ -113,8 +113,9 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
         if i == 0:
             combined_results = []
             combined_results.append(['filename'])
-            combined_results.append(['interestdb (%s)' % interest_fp])
-            combined_results.append(['other db (%s)' % other_fp])
+            combined_results.append(['interest db (%s)' %
+                                     basename(interest_fp)])
+            combined_results.append(['other db (%s)' % basename(other_fp)])
             combined_results.append(['only interest'])
             combined_results.append(['both dbs'])
             combined_results.append(['no hits in interest db'])

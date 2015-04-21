@@ -38,17 +38,17 @@ DIR_TYPE = click.Path(exists=False, file_okay=False, dir_okay=True,
 @click.option('--interest_pcts', required=False, type=click.IntRange(0, None),
               multiple=True, show_default=True, help='Minimum percentage '
               'identity to be considered as a valid result in the interest '
-              'database search results.', default=70)
-@click.option('--interest_alg_lengths', required=False, show_default=True,
+              'database search results.', default=(70,))
+@click.option('--interest_alg_lens', required=False, show_default=True,
               type=click.IntRange(0, None), multiple=True,
               help='Minimum alginment length to be considered a valid result '
-              'in the interest database search results', default=50)
+              'in the interest database search results', default=(50,))
 @click.option('--other_pcts', required=False, type=click.IntRange(0, None),
               show_default=True, multiple=True, help='Minimum percentage '
               'identity to be considered as a valid result in the other '
               'database search results. If None is passed the values from '
               '--interest_pcts will be used.', default=None)
-@click.option('--other_alg_lengths', required=False,
+@click.option('--other_alg_lens', required=False,
               type=click.IntRange(0, None), multiple=True, show_default=True,
               help='Minimum alginment length to be considered a valid result '
               'in the other database search results. If None is passed the '
