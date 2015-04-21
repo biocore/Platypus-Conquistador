@@ -115,6 +115,25 @@ class TestCompare(TestCase):
             compare(self.interest_fp, self.other_fp, temp_dir,
                     interest_alg_lens=(20,), other_alg_lens=(100, 10))
 
+    def test_hits_to_both(self):
+        temp_dir = gettempdir()
+        self.to_delete.append(temp_dir)
+
+        compare(self.interest_fp, self.other_fp, temp_dir, hits_to_first=True,
+                hits_to_second=True)
+
+        files = ['compile_output.txt', 'compile_output_no_nohits.txt',
+                'hits_to_first_db_p1_70-a1_50_p2_70-a2_50.txt',
+                'hits_to_second_db_p1_70-a1_50_p2_70-a2_50.txt',
+                'summary_p1_70-a1_50_p2_70-a2_50.txt']
+
+        for fp in files:
+            exp_fp = join(self.base, 'compare-tests', fp)
+            out_fp = join(temp_dir, fp)
+
+            with open(exp_fp) as exp, open(out_fp) as out:
+                self.assertItemsEqual(exp.readlines(), out.readlines())
+
 
 if __name__ == '__main__':
     main()

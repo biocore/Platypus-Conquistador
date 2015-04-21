@@ -130,28 +130,22 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
         combined_results[4].append(str(item['equal']))
         combined_results[5].append(str(no_hits))
 
-        # saving count of hits to the db
-        if hits_to_first:
-            s_hits = sorted(item['db_seqs_counts']['a'].items(),
-                            key=itemgetter(1), reverse=True)
+        # tiny helper function to save hits files
+        def save_hits(data, name):
 
-            filename = join(output_dir,
-                            "hits_to_first_db_%s.txt" % item['filename'])
-
+            s_hits = sorted(data, key=itemgetter(1), reverse=True)
+            filename = join(output_dir, name)
             with open(filename, 'w') as fd:
                 fd.write('\n'.join(['%s\t%d' % (k, v)
                                     for k, v in s_hits if v != 0]))
 
+        if hits_to_first:
+            save_hits(item['db_seqs_counts']['a'].items(),
+                      "hits_to_first_db_%s.txt" % item['filename'])
+
         if hits_to_second:
-            s_hits = sorted(item['db_seqs_counts']['b'].items(),
-                            key=itemgetter(1), reverse=True)
-
-            filename = join(output_dir,
-                            "hits_to_second_db_%s.txt" % item['filename'])
-
-            with open(filename, 'w') as fd:
-                fd.write('\n'.join(['%s: %d' %
-                                    (k, v) for k, v in s_hits if v != 0]))
+            save_hits(item['db_seqs_counts']['b'].items(),
+                      "hits_to_second_db_%s.txt" % item['filename'])
 
     # saving collated results
     with open(join(output_dir, "compile_output.txt"), 'w') as compiled_output:
