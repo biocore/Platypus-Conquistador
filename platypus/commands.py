@@ -179,6 +179,12 @@ def split_db(tax_fp, seqs_fp, query, output_fp, split_fp):
     split_fp : str
         The tab delimited query file, where each line is a different sequence
         and the first column is the sequence id.
+
+    Raises
+    ------
+    BadParameter
+        If the Taxonomy file is empty.
+        If the query you passed retrieved no results.
     """
 
     if query is not None:
@@ -193,11 +199,10 @@ def split_db(tax_fp, seqs_fp, query, output_fp, split_fp):
             raise BadParameter('The query could not retrieve any results, try '
                                'a different one.')
     else:
-        try:
-            interest_taxonomy = {l.strip().split('\t')[0].strip(): ''
-                                 for l in open(split_fp, 'U')}
-        except (PlatypusValueError, PlatypusParseError), e:
-            raise BadParameter(e.message)
+        interest_taxonomy = {l.strip().split('\t')[0].strip(): ''
+                             for l in open(split_fp, 'U')}
+        if not interest_taxonomy:
+            raise BadParameter('The split_fp is empty!')
 
     try:
         makedirs(output_fp)

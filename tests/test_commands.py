@@ -21,6 +21,9 @@ class TestSplitDB(TestCase):
         self.tax_fp = join(self.base, 'small-bacteria.contigs.txt')
         self.seqs_fp = join(self.base, 'small-bacteria.contigs.fna')
 
+        self.bad_tax_fp = join(self.base, 'bad-taxa.txt')
+        self.bad_split_fp = join(self.base, 'bad-split.txt')
+
         self.to_delete = []
 
     def tearDown(self):
@@ -72,6 +75,18 @@ class TestSplitDB(TestCase):
 
         with open(exp_rest) as exp, open(out_rest) as out:
             self.assertItemsEqual(exp.readlines(), out.readlines())
+
+    def test_split_db_split_fp_errors(self):
+        temp_dir = gettempdir()
+        self.to_delete.append(temp_dir)
+
+        with self.assertRaises(BadParameter):
+            split_db(self.bad_tax_fp, self.seqs_fp, 'Streptococcus', temp_dir,
+                     None)
+
+        with self.assertRaises(BadParameter):
+            split_db(self.tax_fp, self.seqs_fp, None, temp_dir,
+                     self.bad_split_fp)
 
 
 class TestCompare(TestCase):
