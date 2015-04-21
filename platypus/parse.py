@@ -150,6 +150,7 @@ def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
             subject_id_b = vals['b']['subject_id']
             db_seqs_counts_a = results[i]['db_seqs_counts']['a']
             db_seqs_counts_b = results[i]['db_seqs_counts']['b']
+
             # validating duplicated results in the databases
             # do this step in a different script early in the pipeline
             if subject_id_a not in db_seqs_counts_a:

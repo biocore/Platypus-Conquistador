@@ -22,7 +22,7 @@ class TopLevelTests(TestCase):
 
         out_total_queries, out_best_hits = parse_first_database(self.db1,
                                                                 [.80], [50])
-        self.assertEquals(out_total_queries, 6)
+        self.assertEquals(out_total_queries, 4)
         self.assertEquals(
             out_best_hits,
             {'HABJ36W02EXF44': [
@@ -30,18 +30,6 @@ class TopLevelTests(TestCase):
                        'subject_id': 'NZ_ABEH01000018_641736102',
                        'bit_score': 1005.0, 'percentage_id': 99.42,
                        'alg_length': 519},
-                 'b': {'subject_id': None, 'bit_score': -1}}],
-             'SAME-RESULT-BIT-SCORE': [
-                {'a': {'evalue': 4e-133,
-                       'subject_id': 'NZ_ACZD01000120_647000262',
-                       'bit_score': 500.0, 'percentage_id': 100.0,
-                       'alg_length': 455},
-                 'b': {'subject_id': None, 'bit_score': -1}}],
-             'SAME-RESULT': [
-                {'a': {'evalue': 4e-133,
-                       'subject_id': 'NZ_ACZD01000120_647000262',
-                       'bit_score': 482.0, 'percentage_id': 88.79,
-                       'alg_length': 455},
                  'b': {'subject_id': None, 'bit_score': -1}}],
              'BLANK-TEST-NOT-IN-SECOND': [
                 {'a': {'evalue': 4e-133,
@@ -103,17 +91,35 @@ class TopLevelTests(TestCase):
                 'a': {'evalue': 0.0, 'subject_id': 'NZ_ABEH01000005_641736102',
                       'bit_score': 959.0, 'percentage_id': 99.22,
                       'alg_length': 512},
-                'b': {'subject_id': None, 'bit_score': -1}}]}
+                'b': {'subject_id': None, 'bit_score': -1}}],
+            'SAME-VALUES': [{
+                'a': {'evalue': 0.0, 'subject_id': 'RESULT-A',
+                      'bit_score': 959.0, 'percentage_id': 99.22,
+                      'alg_length': 512},
+                'b': {'evalue': 0.0, 'subject_id': 'RESULT-B',
+                      'bit_score': 959.0, 'percentage_id': 99.22,
+                      'alg_length': 512}}],
+            'OTHER-BETTER': [{
+                'a': {'evalue': 0.0, 'subject_id': 'RESULT-A',
+                      'bit_score': 10.0, 'percentage_id': 10.0,
+                      'alg_length': 10},
+                'b': {'evalue': 0.0, 'subject_id': 'RESULT-B',
+                      'bit_score': 959.0, 'percentage_id': 100,
+                      'alg_length': 900}}]
+        }
 
         out_results = process_results([0.80], [50], [0.30], [30], best_hits)
         self.assertEquals(out_results, [{
-            'db_interest': 0, 'db_other': 0, 'db_seqs_counts': {
+            'db_interest': 0, 'db_other': 1, 'db_seqs_counts': {
                 'a': {'NZ_ABEH01000005_641736102': 1,
+                      'RESULT-A': 1,
                       'NZ_ABEH01000018_641736102': 1},
-                'b': {None: 0}},
-            'perfect_interest': 2, 'equal': 0, 'summary':
+                'b': {None: 0, 'RESULT-B': 2}},
+            'perfect_interest': 2, 'equal': 1, 'summary':
             ['#SeqId\tFirst\tSecond',
              'HABJ36W02EXF44\tNZ_ABEH01000018_641736102\t',
+             'OTHER-BETTER\n\t',
+             'SAME-VALUES\tRESULT-A\tRESULT-B',
              'HABJ36W02DLDSY\tNZ_ABEH01000005_641736102\t'],
             'filename': 'p1_0-a1_50_p2_0-a2_30'}])
 

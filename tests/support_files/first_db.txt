@@ -157,13 +157,3 @@ HABJ36W02DLDSY	AP011957_651053064	100.00	17	0	0	397	413	3162729	3162713	5.8	34.2
 # Database: Salmonella.contig.fna
 # Fields: Query id, Subject id, % identity, alignment length, mismatches, gap openings, q. start, q. end, s. start, s. end, e-value, bit score
 BLANK-TEST-NOT-IN-SECOND	NZ_ACZD01000120_647000262	88.79	455	49	2	34	487	40604	41057	4e-133	 482
-# BLASTN 2.2.22 [Sep-27-2009]
-# Query: SAME-RESULT
-# Database: Salmonella.contig.fna
-# Fields: Query id, Subject id, % identity, alignment length, mismatches, gap openings, q. start, q. end, s. start, s. end, e-value, bit score
-SAME-RESULT	NZ_ACZD01000120_647000262	88.79	455	49	2	34	487	40604	41057	4e-133	 482
-# BLASTN 2.2.22 [Sep-27-2009]
-# Query: SAME-RESULT-BIT-SCORE
-# Database: Salmonella.contig.fna
-# Fields: Query id, Subject id, % identity, alignment length, mismatches, gap openings, q. start, q. end, s. start, s. end, e-value, bit score
-SAME-RESULT-BIT-SCORE	NZ_ACZD01000120_647000262	100	455	49	2	34	487	40604	41057	4e-133	 500

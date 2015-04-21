@@ -102,17 +102,3 @@ HABJ36W02DLDSY	NC_014306_649633042	93.33	30	2	0	36	65	3417330	3417301	0.29	44.1
 # Query: BLANK-TEST
 # Database: Rest.contig.fna
 # Fields: Query id, Subject id, % identity, alignment length, mismatches, gap openings, q. start, q. end, s. start, s. end, e-value, bit score
-# BLASTN 2.2.22 [Sep-27-2009]
-# Query: BLANK-TEST-NOT-IN-FIRST
-# Database: Rest.contig.fna
-# Fields: Query id, Subject id, % identity, alignment length, mismatches, gap openings, q. start, q. end, s. start, s. end, e-value, bit score
-BLANK-TEST-NOT-IN-FIRST	NZ_ACZD01000120_647000262	88.79	455	49	2	34	487	40604	41057	4e-133	 482# BLASTN 2.2.22 [Sep-27-2009]
-# Query: SAME-RESULT
-# Database: Rest.contig.fna
-# Fields: Query id, Subject id, % identity, alignment length, mismatches, gap openings, q. start, q. end, s. start, s. end, e-value, bit score
-SAME-RESULT	NZ_ACZD01000120_647000262	88.79	455	49	2	34	487	40604	41057	4e-133	 482
-# BLASTN 2.2.22 [Sep-27-2009]
-# Query: SAME-RESULT-BIT-SCORE
-# Database: Rest.contig.fna
-# Fields: Query id, Subject id, % identity, alignment length, mismatches, gap openings, q. start, q. end, s. start, s. end, e-value, bit score
-SAME-RESULT-BIT-SCORE	NZ_ACZD01000120_647000262	100	455	49	2	34	487	40604	41057	4e-133	 500
