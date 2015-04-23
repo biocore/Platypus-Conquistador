@@ -28,29 +28,27 @@ M9 = namedtuple('m9', [h[0] for h in _header])
 M9_empty = [M9(**{h: None for h, _ in _header})]
 
 
-def parse_m9(lines_or_fp):
+def parse_m9(fp):
     """Parse m9 formatted tabular data
 
     Parameters
     ----------
-    lines : iterable of str, or a filepath
-        The lines to parse. It is expected that these lines are in BLAST m9
-        format, or comparable. Any additional columns will be ignored
+    fp : file-like object
+        A file pointer that contains the lines to parse. It is expected that
+        these lines are in BLAST m9 format, or comparable. Any additional
+        columns will be ignored
 
     Returns
     -------
     list of namedtuple
         The namedtuples describe each field of the m9 format per record.
     """
-    if isinstance(lines_or_fp, str):
-        lines_or_fp = open(lines_or_fp)
-
     res = []
     hits = []
     current_query = None
     start_of_record = False
 
-    for line in lines_or_fp:
+    for line in fp:
         # Using the header detail from BLAST to differentiate records as this
         # allows us to get a correct count of query sequences from BLAST
         # results. We cannot do this from SortMeRNA
