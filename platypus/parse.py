@@ -68,7 +68,7 @@ def parse_m9(fp):
         # same, and we only care about the 12 fields common with BLAST.
         parts = line.strip().split('\t')[:12]
 
-        if len(parts) < 12:
+        if len(parts) not in (12, 14):  # 12 is BLAST, 14 is SortMeRNA
             raise ValueError("Unexpected number of fields found")
 
         start_of_record = False
