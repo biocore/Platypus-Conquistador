@@ -12,7 +12,7 @@ from operator import itemgetter
 
 from click import BadParameter
 from skbio.util import create_dir
-from skbio import parse_fasta
+from skbio import read
 
 from platypus.compare import (
     sequences_from_query, PlatypusParseError, PlatypusValueError)
@@ -209,7 +209,10 @@ def split_db(tax_fp, seqs_fp, query, output_fp, split_fp):
     interest_fp = open(join(output_fp, 'interest.fna'), 'w')
     rest_fp = open(join(output_fp, 'rest.fna'), 'w')
 
-    for full_name, seq in parse_fasta(seqs_fp):
+    for record in read(seqs_fp, format='fasta'):
+        full_name = record.id
+        seq = record.sequence
+
         name = full_name.strip().split(' ')[0].strip()
 
         if name in interest_taxonomy:
