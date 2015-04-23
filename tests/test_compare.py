@@ -1,5 +1,10 @@
-#!/usr/bin/env python
-# File created on 17 Jul 2013
+# ----------------------------------------------------------------------------
+# Copyright (c) 2015--, platypus development team.
+#
+# Distributed under the terms of the BSD License.
+#
+# The full license is in the file COPYING.txt, distributed with this software.
+# ----------------------------------------------------------------------------
 from __future__ import division
 
 from platypus.compare import (
