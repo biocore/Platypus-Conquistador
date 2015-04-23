@@ -25,7 +25,13 @@ class TopLevelTests(TestCase):
         self.db2 = open(join(base, 'second_db.txt'), 'r')
         self.blasttest = open(join(base, 'blast_test_output.txt'))
         self.smrtest = open(join(base, 'sortmerna_test_output.txt'))
+        self.smrtest_bad = open(join(base, 'sortmerna_test_output_bad.txt'))
         self.m9_empty = M9(*[None] * 12)
+
+    def test_parse_m9_bad(self):
+        """Raise on an incomplete record"""
+        with self.assertRaises(ValueError):
+            parse_m9(self.smrtest_bad)
 
     def test_parse_m9_sortmerna(self):
         """Parse sortmerna output as expected"""
