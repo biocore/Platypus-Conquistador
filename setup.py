@@ -2,7 +2,7 @@
 # ----------------------------------------------------------------------------
 # Copyright (c) 2015--, platypus development team.
 #
-# Distributed under the terms of the GPL License.
+# Distributed under the terms of the BSD License.
 #
 # The full license is in the file COPYING.txt, distributed with this software.
 # ----------------------------------------------------------------------------
@@ -12,13 +12,14 @@ from distutils.core import setup
 
 classes = """
     Development Status :: 2 - Pre-Alpha
-    License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+    License :: OSI Approved :: BSD License
     Topic :: Software Development :: Libraries :: Application Frameworks
     Programming Language :: Python
     Programming Language :: Python :: 2.7
     Programming Language :: Python :: Implementation :: CPython
     Operating System :: OS Independent
     Operating System :: POSIX
+    Operating System :: POSIX :: Linux
     Operating System :: MacOS :: MacOS X
 """
 classifiers = [s.strip() for s in classes.split('\n') if s]
@@ -26,7 +27,7 @@ classifiers = [s.strip() for s in classes.split('\n') if s]
 long_description = ("Platypus Conquistador: Confirming specific taxonomic "
                     "groups within your metagenomic samples.")
 
-base = {"click", "scikit-bio >= 0.2.1, < 0.3.0", 'cogent'}
+base = {"click", "scikit-bio >= 0.2.1, < 0.3.0"}
 test = {"nose >= 0.10.1", "pep8", "flake8"}
 all_deps = base | test
 
@@ -38,7 +39,7 @@ setup(name='platytpus-conquistador',
       maintainer='Antonio Gonzalez Pena',
       maintainer_email='antgonza@gmail.com',
       url='http://github.com/biocore/platypus',
-      license='GPL',
+      license='BSD',
       packages=['platypus'],
       scripts=['scripts/platypus'],
       install_requires=base,
