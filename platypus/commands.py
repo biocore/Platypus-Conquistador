@@ -94,7 +94,7 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
         other_alg_lens = interest_alg_lens
 
     # process databases
-    total_queries, best_hits = parse_first_database(db_a, interest_pcts, 
+    total_queries, best_hits = parse_first_database(db_a, interest_pcts,
                                                     interest_alg_lens)
     parse_second_database(db_b, best_hits, other_pcts,
                           other_alg_lens)
