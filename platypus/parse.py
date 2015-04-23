@@ -76,24 +76,32 @@ def parse_m9(lines_or_fp):
 
 
 def parse_first_database(db, percentage_ids, alignment_lengths):
-    """parses 1st db file and finds the seqs with hits above the given threshold
+    """Find hits above a given threshold
 
-    inputs:
-        db: file pointer to 1st database
-        percentage_ids: array with percentage values
-        alignment_lengths: array with alignment length values
+    Parameters
+    ----------
+        db : file-like object
+            file pointer to 1st database
+        percentage_ids : iterable of ints
+            Iterable with percentage ids
+        alignment_lengths : iterable of ints
+            Iterable with alignment length values
 
-    output:
-        total_queries: total number of seqs in the db
-        best_hits: dict of seqs and hits
-            {'seq_id':
-                [{ 'a': { 'evalue':%f, 'percentageId':%f, 'bitScore':%f,
-                          'subjectId':%s, 'algLength':%f },
-                   'evalue': float(h[evalue]) },
-                   'b': { 'subject_id': None, 'bit_score': -1 },
-                   # One element for each combination of %id and aln length
-                ]
-            }
+    Returns
+    -------
+        int
+            total number of seqs in the db
+        dict
+            A dictionary of seqs and hits, of the form:
+                {'seq_id':
+                    [{
+                        'a': {'evalue':%f, 'percentageId':%f, 'bitScore':%f,
+                              'subjectId':%s, 'algLength':%f},
+                              'evalue': float(h[evalue])},
+                        'b': { 'subject_id': None, 'bit_score': -1 },
+                       # One element for each combination of %id and aln length
+                    ]
+                }
     """
     # try blast parser object
     results = parse_m9(db)
@@ -130,16 +138,23 @@ def parse_first_database(db, percentage_ids, alignment_lengths):
 
 def parse_second_database(db, best_hits, percentage_ids_other,
                           alignment_lengths_other):
-    """ parses 2nd database, only looks at successful hits of the 1st
+    """Parses 2nd database, only looking at successful hits of the 1st db
 
-    inputs:
-        db: filename of the blast results against a database without first
-        best_hits: a dict with the successful results from parse_first_database
-        percentage_ids: array with percentage values
-        alignment_lengths: array with alignment length values
+    Parameters
+    ----------
+        db : str
+            Filename of the blast results against a database without first
+        best_hits: dict
+            A dictionary with the successful results from parse_first_database
+        percentage_ids : iterable
+            Iterable with percentage id values
+        alignment_lengths : iterable
+            Iterable with with alignment length values
 
-    output:
-        None: the command modifies best_hits, section b
+    Notes
+    -----
+        There are no return values, the command modifies best_hits, mainly the
+        'b' key.
     """
     results = parse_m9(db)
 
@@ -172,12 +187,29 @@ def parse_second_database(db, best_hits, percentage_ids_other,
 
 def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
                     alignment_lengths_other, best_hits):
-    """Writes the individual rarefaction levels and then returns the collated
-    result
+    """Format the results into a summary dictionary
 
-    inputs:
+    Parameters
+    ----------
+    percentage_ids : iterable of ints
+        An iterable of ints with the percentage identities for the reference
+        database.
+    alignment_lengths : iterable of ints
+        An iterable of ints with the alignment lengths for the reference
+        database.
+    percentage_ids_other : iterable of ints
+        An iterable of ints with the percentage identities for the 'other'
+        database.
+    alignment_lengths_other : iterable of ints
+        An iterable of ints with the alignment lengths for the 'other'
+        database.
+    best_hits : dict
+        A dictionary with the best hits found in the databases.
 
-    output:
+    Returns
+    -------
+    list of dicts
+        List of dictionaries with the summarized results.
     """
     results = []
 

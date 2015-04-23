@@ -26,18 +26,26 @@ class PlatypusValueError(PlatypusError):
 def sequences_from_query(taxonomy, query):
     """Parses and searches for a query in the contents of taxonomy
 
-    Inputs:
-    taxonomy: file descriptor, StringIO object or lines that contain
-    tab-delimited values of sequence identifier to taxonomy assignment
-    query: string to search for in the taxonomy assignments
+    Parameters
+    ----------
+    taxonomy : file-like
+        File descriptor, StringIO object or lines that contain tab-delimited
+        values of sequence identifier to taxonomy assignment.
+    query : str
+        String to search for in the taxonomy assignments.
 
-    Output:
-    interest_taxonomy: 1-D dictionary where the keys are the sequence
-    identifiers and the values are the taxonomy assignments
+    Returns
+    -------
+    dict
+        1-D dictionary where the keys are the sequence identifiers and the
+        values are the taxonomy assignments
 
-    Raises:
-    PlatypusParseError if the input is not a two column tab-delimited file
-    PlatypusValueError if the input contains repeated sequence identifiers
+    Raises
+    ------
+    PlatypusParseError
+        If the input is not a two column tab-delimited file.
+    PlatypusValueError
+        If the input contains repeated sequence identifiers.
     """
     # Note this function could be greatly benefited from a C extension
 
