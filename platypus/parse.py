@@ -10,6 +10,21 @@ from itertools import product, izip
 from collections import namedtuple
 
 
+_header = (('query', str),
+           ('subject', str),
+           ('percent_id', float),
+           ('aln_length', int),
+           ('mismatches', int),
+           ('gapopenings', int),
+           ('q_start', int),
+           ('q_end', int),
+           ('s_start', int),
+           ('s_end', int),
+           ('evalue', float),
+           ('bitscore', float))
+M9 = namedtuple('m9', [h[0] for h in _header])
+
+
 def parse_m9(lines_or_fp):
     """Parse m9 formatted tabular data
 
@@ -24,20 +39,6 @@ def parse_m9(lines_or_fp):
     list of namedtuple
         The namedtuples describe each field of the m9 format per record.
     """
-    header = (('query', str),
-              ('subject', str),
-              ('percent_id', float),
-              ('aln_length', int),
-              ('mismatches', int),
-              ('gapopenings', int),
-              ('q_start', int),
-              ('q_end', int),
-              ('s_start', int),
-              ('s_end', int),
-              ('evalue', float),
-              ('bitscore', float))
-    m9 = namedtuple('m9', [h[0] for h in header])
-
     if isinstance(lines_or_fp, str):
         lines_or_fp = open(lines_or_fp)
 
@@ -54,7 +55,7 @@ def parse_m9(lines_or_fp):
 
         if line.startswith('# BLASTN') and start_of_record:
             # We have an empty record
-            res.append((None, m9(**{h: None for h, _ in header})))
+            res.append((None, [M9(**{h: None for h, _ in _header})]))
             continue
 
         if line.startswith('#'):
@@ -66,7 +67,7 @@ def parse_m9(lines_or_fp):
         if len(parts) < 12:
             raise ValueError("Unexpected number of fields found")
 
-        hits.append(m9(**{h: c(v) for (h, c), v in zip(header, parts[:12])}))
+        hits.append(M9(**{h: c(v) for (h, c), v in zip(_header, parts[:12])}))
 
     if hits:
         res.append((hits[0].query, hits))

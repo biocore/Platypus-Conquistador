@@ -7,11 +7,13 @@
 # ----------------------------------------------------------------------------
 from __future__ import division
 
-from platypus.parse import (
-    parse_first_database, parse_second_database, process_results)
-
+from copy import copy
 from unittest import TestCase, main
 from os.path import join, dirname
+
+from platypus.parse import (
+    parse_first_database, parse_second_database, process_results,
+    M9, parse_m9)
 
 
 class TopLevelTests(TestCase):
@@ -21,6 +23,43 @@ class TopLevelTests(TestCase):
         base = join(dirname(__file__), 'support_files')
         self.db1 = open(join(base, 'first_db.txt'), 'r')
         self.db2 = open(join(base, 'second_db.txt'), 'r')
+        self.blasttest = open(join(base, 'blast_test_output.txt'))
+        self.smrtest = open(join(base, 'sortmerna_test_output.txt'))
+        self.m9_empty = M9(*[None] * 12)
+
+    def test_parse_m9_blast(self):
+        """Parse blast output as expected"""
+        fna_6_hits = [M9(query='4502804.3.fna_6', subject='28_interest.fna',
+                         percent_id=100.00, aln_length=14, mismatches=0,
+                         gapopenings=0, q_start=42, q_end=55, s_start=98,
+                         s_end=111, evalue=0.006, bitscore=28.2)]
+        fna_8_hits = [M9(query='4502804.3.fna_8', 
+                         subject='20_interest_hita.fna', percent_id=100.00, 
+                         aln_length=13, mismatches=0, gapopenings=0, 
+                         q_start=19, q_end=31, s_start=529, s_end=541, 
+                         evalue=0.059, bitscore=26.3),
+                      M9(query='4502804.3.fna_8', 
+                         subject='20_interest_hitb.fna', percent_id=100.00, 
+                         aln_length=13, mismatches=0, gapopenings=0, 
+                         q_start=19, q_end=31, s_start=529, s_end=541, 
+                         evalue=0.059, bitscore=26.3),
+                      M9(query='4502804.3.fna_8', 
+                         subject='20_interest_hitc.fna', percent_id=100.00, 
+                         aln_length=13, mismatches=0, gapopenings=0, 
+                         q_start=19, q_end=31, s_start=529, s_end=541, 
+                         evalue=0.059, bitscore=26.3)]
+        fna_9_hits = [M9(query='4502804.3.fna_9', subject='26_interest.fna',
+                         percent_id=100.00, aln_length=14, mismatches=0,
+                         gapopenings=0, q_start=114, q_end=127, s_start=3039,
+                         s_end=3026, evalue=0.020, bitscore=28.2)]
+        exp = [(None, [copy(self.m9_empty)]),
+               ('4502804.3.fna_6', fna_6_hits),
+               (None, [copy(self.m9_empty)]),
+               ('4502804.3.fna_8', fna_8_hits),
+               ('4502804.3.fna_9', fna_9_hits)]
+
+        obs = parse_m9(self.blasttest)
+        self.assertEqual(obs, exp)
 
     def test_parse_first_database(self):
         """Parse first db should build best_hits correctly"""
