@@ -8,6 +8,7 @@
 from __future__ import division
 from itertools import product, izip
 from collections import namedtuple
+from copy import copy
 
 
 _header = (('query', str),
@@ -22,7 +23,9 @@ _header = (('query', str),
            ('s_end', int),
            ('evalue', float),
            ('bitscore', float))
+
 M9 = namedtuple('m9', [h[0] for h in _header])
+M9_empty = [M9(**{h: None for h, _ in _header})]
 
 
 def parse_m9(lines_or_fp):
@@ -44,34 +47,48 @@ def parse_m9(lines_or_fp):
 
     res = []
     hits = []
+    current_query = None
     start_of_record = False
+
     for line in lines_or_fp:
-        if line.startswith('# Fields'):
-            start_of_record = True
-            if hits:
-                res.append((hits[0].query, hits))
-                hits = []
-            continue
-
-        if line.startswith('# BLASTN') and start_of_record:
-            # We have an empty record
-            res.append((None, [M9(**{h: None for h, _ in _header})]))
-            continue
-
+        # Using the header detail from BLAST to differentiate records as this
+        # allows us to get a correct count of query sequences from BLAST
+        # results. We cannot do this from SortMeRNA
         if line.startswith('#'):
+            if line.startswith('# Fields'):
+                start_of_record = True
+                if hits:
+                    res.append((hits[0].query, hits))
+                    hits = []
+
+            elif line.startswith('# BLASTN') and start_of_record:
+                res.append((None, copy(M9_empty)))
+
             continue
 
-        start_of_record = False
-        parts = line.strip().split('\t')
+        # BLAST output contains 12 fields, SortMeRNA has 14. The order is the
+        # same, and we only care about the 12 fields common with BLAST.
+        parts = line.strip().split('\t')[:12]
 
         if len(parts) < 12:
             raise ValueError("Unexpected number of fields found")
 
-        hits.append(M9(**{h: c(v) for (h, c), v in zip(_header, parts[:12])}))
+        start_of_record = False
+        hit = M9(**{h: c(v) for (h, c), v in zip(_header, parts)})
+
+        # SortMeRNA doesn't have the header output to differentiate records
+        if hit.query != current_query and hits:
+            res.append((hits[0].query, hits))
+            hits = []
+            current_query = None
+        hits.append(hit)
+        current_query = hit.query
 
     if hits:
         res.append((hits[0].query, hits))
         hits = []
+    elif start_of_record:
+        res.append((None, copy(M9_empty)))
 
     return res
 
