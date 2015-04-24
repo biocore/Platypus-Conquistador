@@ -1,0 +1,29 @@
+# BLASTN 2.2.22 [Sep-27-2009]
+# Query: 4502804.3.fna_5 215640 orig_bc= new_bc= bc_diffs=0
+# Database: databases/interest.fna
+# Fields: Query id, Subject id, % identity, alignment length, mismatches, gap openings, q. start, q. end, s. start, s. end, e-value, bit score
+# BLASTN 2.2.22 [Sep-27-2009]
+# Query: 4502804.3.fna_6 415500 orig_bc= new_bc= bc_diffs=0
+# Database: databases/interest.fna
+# Fields: Query id, Subject id, % identity, alignment length, mismatches, gap openings, q. start, q. end, s. start, s. end, e-value, bit score
+4502804.3.fna_6	28_interest.fna	100.00	14	0	0	42	55	98	111	0.006	28.2
+# BLASTN 2.2.22 [Sep-27-2009]
+# Query: 4502804.3.fna_7 161436 orig_bc= new_bc= bc_diffs=0
+# Database: databases/interest.fna
+# Fields: Query id, Subject id, % identity, alignment length, mismatches, gap openings, q. start, q. end, s. start, s. end, e-value, bit score
+# BLASTN 2.2.22 [Sep-27-2009]
+# Query: 4502804.3.fna_8 215579 orig_bc= new_bc= bc_diffs=0
+# Database: databases/interest.fna
+# Fields: Query id, Subject id, % identity, alignment length, mismatches, gap openings, q. start, q. end, s. start, s. end, e-value, bit score
+4502804.3.fna_8	20_interest_hita.fna	100.00	13	0	0	19	31	529	541	0.059	26.3
+4502804.3.fna_8	20_interest_hitb.fna	100.00	13	0	0	19	31	529	541	0.059	26.3
+4502804.3.fna_8	20_interest_hitc.fna	100.00	13	0	0	19	31	529	541	0.059	26.3
+# BLASTN 2.2.22 [Sep-27-2009]
+# Query: 4502804.3.fna_9 196401 orig_bc= new_bc= bc_diffs=0
+# Database: databases/interest.fna
+# Fields: Query id, Subject id, % identity, alignment length, mismatches, gap openings, q. start, q. end, s. start, s. end, e-value, bit score
+4502804.3.fna_9	26_interest.fna	100.00	14	0	0	114	127	3039	3026	0.020	28.2
+# BLASTN 2.2.22 [Sep-27-2009]
+# Query: 4502804.3.fna_dangling 196401 orig_bc= new_bc= bc_diffs=0
+# Database: databases/interest.fna
+# Fields: Query id, Subject id, % identity, alignment length, mismatches, gap openings, q. start, q. end, s. start, s. end, e-value, bit score

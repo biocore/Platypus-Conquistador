@@ -1,7 +1,7 @@
 Platypus Conquistador installation notes
 ===========================
 
-Platypus Conquistador is a python package that relies on [scikit-bio](http://scikit-bio.org/), [PyCogent](http://pycogent.org/) and [click](http://click.pocoo.org/).
+Platypus Conquistador is a python package that relies on [scikit-bio](http://scikit-bio.org/) and [click](http://click.pocoo.org/).
 
 Installation
 ============

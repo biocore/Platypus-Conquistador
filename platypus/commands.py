@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # Copyright (c) 2015--, platypus development team.
 #
-# Distributed under the terms of the GPL License.
+# Distributed under the terms of the BSD License.
 #
 # The full license is in the file COPYING.txt, distributed with this software.
 # ----------------------------------------------------------------------------
@@ -12,7 +12,7 @@ from operator import itemgetter
 
 from click import BadParameter
 from skbio.util import create_dir
-from cogent.parse.fasta import MinimalFastaParser
+from skbio import read
 
 from platypus.compare import (
     sequences_from_query, PlatypusParseError, PlatypusValueError)
@@ -209,7 +209,10 @@ def split_db(tax_fp, seqs_fp, query, output_fp, split_fp):
     interest_fp = open(join(output_fp, 'interest.fna'), 'w')
     rest_fp = open(join(output_fp, 'rest.fna'), 'w')
 
-    for full_name, seq in MinimalFastaParser(open(seqs_fp, 'U')):
+    for record in read(seqs_fp, format='fasta'):
+        full_name = record.id
+        seq = record.sequence
+
         name = full_name.strip().split(' ')[0].strip()
 
         if name in interest_taxonomy:

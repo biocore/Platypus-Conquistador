@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # Copyright (c) 2015--, platypus development team.
 #
-# Distributed under the terms of the GPL License.
+# Distributed under the terms of the BSD License.
 #
 # The full license is in the file COPYING.txt, distributed with this software.
 # ----------------------------------------------------------------------------
@@ -11,7 +11,7 @@ from platypus.compare import (
     sequences_from_query, PlatypusParseError, PlatypusValueError)
 
 from os.path import dirname, join, abspath
-from cogent.util.unit_test import TestCase, main
+from unittest import TestCase, main
 
 
 class TopLevelTests(TestCase):
