@@ -1,20 +1,40 @@
-NZ_AAHO01000122|638341030Burkholderia mallei GB8 horse 4
-NZ_AAHR02000120|638341036Burkholderia pseudomallei 1655
-NZ_AAMM02000054|638341038Burkholderia pseudomallei 406e
-NZ_AAMM02000153|638341038Burkholderia pseudomallei 406e
-NZ_AANQ01000003|638341053Campylobacter jejuni jejuni HB93-13
-NZ_AANQ01000024|638341053Campylobacter jejuni jejuni HB93-13
-NZ_AAJU01000012|638341089Escherichia coli O139:H28 F11 (ETEC)
-NZ_AAAP01001118|638341121Magnetospirillum magnetotacticum MS-1
-NZ_AAAP01001427|638341121Magnetospirillum magnetotacticum MS-1
-NZ_AAAP01001615|638341121Magnetospirillum magnetotacticum MS-1
-NZ_AAAP01002069|638341121Magnetospirillum magnetotacticum MS-1
-NZ_AAAP01002222|638341121Magnetospirillum magnetotacticum MS-1
-NZ_AAAP01003323|638341121Magnetospirillum magnetotacticum MS-1
-NZ_AAKL01000199|638341168Ralstonia solanacearum UW551
-NZ_AAJO01000296|638341202Streptococcus agalactiae 18RS21, ATCC BAA-1175
-NZ_AAJO01000505|638341202Streptococcus agalactiae 18RS21, ATCC BAA-1175
-NZ_AAJP01000241|638341203Streptococcus agalactiae 515, ATCC BAA-1177
-NZ_AAGY02000065|638341207Streptococcus pneumoniae TIGR4
-NZ_AAGY02000209|638341207Streptococcus pneumoniae TIGR4
-NZ_AAFA02000124|638341209Streptococcus suis 89/1591
+NZ_AAHO01000122|638341030
+Burkholderia mallei GB8 horse 4
+NZ_AAHR02000120|638341036
+Burkholderia pseudomallei 1655
+NZ_AAMM02000054|638341038
+Burkholderia pseudomallei 406e
+NZ_AAMM02000153|638341038
+Burkholderia pseudomallei 406e
+NZ_AANQ01000003|638341053
+Campylobacter jejuni jejuni HB93-13
+NZ_AANQ01000024|638341053
+Campylobacter jejuni jejuni HB93-13
+NZ_AAJU01000012|638341089
+Escherichia coli O139:H28 F11 (ETEC)
+NZ_AAAP01001118|638341121
+Magnetospirillum magnetotacticum MS-1
+NZ_AAAP01001427|638341121
+Magnetospirillum magnetotacticum MS-1
+NZ_AAAP01001615|638341121
+Magnetospirillum magnetotacticum MS-1
+NZ_AAAP01002069|638341121
+Magnetospirillum magnetotacticum MS-1
+NZ_AAAP01002222|638341121
+Magnetospirillum magnetotacticum MS-1
+NZ_AAAP01003323|638341121
+Magnetospirillum magnetotacticum MS-1
+NZ_AAKL01000199|638341168
+Ralstonia solanacearum UW551
+NZ_AAJO01000296|638341202
+Streptococcus agalactiae 18RS21, ATCC BAA-1175
+NZ_AAJO01000505|638341202
+Streptococcus agalactiae 18RS21, ATCC BAA-1175
+NZ_AAJP01000241|638341203
+Streptococcus agalactiae 515, ATCC BAA-1177
+NZ_AAGY02000065|638341207
+Streptococcus pneumoniae TIGR4
+NZ_AAGY02000209|638341207
+Streptococcus pneumoniae TIGR4
+NZ_AAFA02000124|638341209
+Streptococcus suis 89/1591
