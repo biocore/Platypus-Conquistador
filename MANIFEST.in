@@ -1,0 +1,9 @@
+include CHANGELOG.md
+include COPYING.txt
+include README.rst
+
+graft ipynbs
+graft platypus
+
+global-exclude *.pyc
+global-exclude *.pyo
