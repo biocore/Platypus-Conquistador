@@ -12,7 +12,9 @@ python setup.py install
 ```
 
 Alternatively Platypus Conquistador can be installed from the Python Package Index ([PyPi](https://pypi.python.org/pypi])) using pip:
-```
+
+```bash
+pip install numpy
 pip install platypus-conquistador
 ```
 
