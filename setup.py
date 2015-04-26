@@ -35,7 +35,7 @@ test = {"nose >= 0.10.1", "pep8", "flake8"}
 all_deps = base | test
 
 setup(name='platypus-conquistador',
-      version='0.9.0',
+      version='0.9.0-dev',
       description=description,
       author='Antonio Gonzalez Pena',
       author_email='antgonza@gmail.com',
