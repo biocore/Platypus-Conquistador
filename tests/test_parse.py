@@ -31,7 +31,7 @@ class TopLevelTests(TestCase):
     def test_parse_m9_bad(self):
         """Raise on an incomplete record"""
         with self.assertRaises(ValueError):
-            parse_m9(self.smrtest_bad)
+            list(parse_m9(self.smrtest_bad))
 
     def test_parse_m9_sortmerna(self):
         """Parse sortmerna output as expected"""
@@ -72,7 +72,7 @@ class TopLevelTests(TestCase):
                ('QiimeExactMatch.4502806.3.fna_562', fna_562_hits),
                ('QiimeExactMatch.4502806.3.fna_828', fna_828_hits)]
 
-        obs = parse_m9(self.smrtest)
+        obs = list(parse_m9(self.smrtest))
         self.assertEqual(obs, exp)
 
     def test_parse_m9_blast(self):
@@ -107,7 +107,7 @@ class TopLevelTests(TestCase):
                ('4502804.3.fna_9', fna_9_hits),
                (None, [copy(self.m9_empty)])]
 
-        obs = parse_m9(self.blasttest)
+        obs = list(parse_m9(self.blasttest))
         self.assertEqual(obs, exp)
 
     def test_parse_first_database(self):

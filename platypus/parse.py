@@ -43,7 +43,6 @@ def parse_m9(fp):
     list of namedtuple
         The namedtuples describe each field of the m9 format per record.
     """
-    res = []
     hits = []
     current_query = None
     start_of_record = False
@@ -56,11 +55,11 @@ def parse_m9(fp):
             if line.startswith('# Fields'):
                 start_of_record = True
                 if hits:
-                    res.append((hits[0].query, hits))
+                    yield (hits[0].query, hits)
                     hits = []
 
             elif line.startswith('# BLASTN') and start_of_record:
-                res.append((None, copy(M9_empty)))
+                yield (None, copy(M9_empty))
 
             continue
 
@@ -76,20 +75,16 @@ def parse_m9(fp):
 
         # SortMeRNA doesn't have the header output to differentiate records
         if hit.query != current_query and hits:
-            res.append((hits[0].query, hits))
+            yield (hits[0].query, hits)
             hits = []
             current_query = None
         hits.append(hit)
         current_query = hit.query
 
     if hits:
-        res.append((hits[0].query, hits))
-        hits = []
+        yield (hits[0].query, hits)
     elif start_of_record:
-        res.append((None, copy(M9_empty)))
-
-    return res
-
+        yield (None, copy(M9_empty))
 
 def parse_first_database(db, percentage_ids, alignment_lengths):
     """Find hits above a given threshold
