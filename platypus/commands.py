@@ -101,15 +101,11 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
 
     # parse results
     results = process_results(interest_pcts, interest_alg_lens,
-                              other_pcts, other_alg_lens, best_hits)
+                              other_pcts, other_alg_lens, best_hits,
+                              output_dir)
 
     # Collating output and writing full results
     for i, item in enumerate(results):
-        filename = join(output_dir, "summary_" + item['filename'] + ".txt")
-
-        with open(filename, 'w') as fd:
-            fd.write('\n'.join(item['summary']))
-
         if i == 0:
             combined_results = []
             combined_results.append(['filename'])
