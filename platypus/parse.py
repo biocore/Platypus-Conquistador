@@ -40,7 +40,7 @@ def parse_m9(fp):
 
     Returns
     -------
-    list of namedtuple
+    iterator of namedtuple
         The namedtuples describe each field of the m9 format per record.
     """
     hits = []
