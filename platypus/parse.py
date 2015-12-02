@@ -86,6 +86,7 @@ def parse_m9(fp):
     elif start_of_record:
         yield (None, copy(M9_empty))
 
+
 def parse_first_database(db, percentage_ids, alignment_lengths):
     """Find hits above a given threshold
 
