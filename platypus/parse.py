@@ -218,7 +218,7 @@ def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
     best_hits : dict
         A dictionary with the best hits found in the databases.
     output_dir : str
-        Name of the output file path.
+        File path to the output directory.
 
     Returns
     -------
@@ -282,7 +282,7 @@ def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
                 db_seqs_counts_a[subject_id_a] += 1
             else:
                 results[i]['db_other'] += 1
-                results[i]['summary_fh'].write('%s\n\t%s\n' % (seq_name, ''))
+                results[i]['summary_fh'].write('%s\t\t\n' % (seq_name))
 
                 db_seqs_counts_b[subject_id_b] += 1
 

@@ -204,7 +204,7 @@ class TopLevelTests(TestCase):
 
         out_results = process_results([0.80], [50], [0.30], [30], best_hits,
                                       self.base)
-        # removing the sumout_resultsmary pointer so we don't need to test
+        # removing the summary_fh pointer so we don't need to test
         out_results[0].pop('summary_fh')
         self.assertEquals(out_results, [{
             'db_interest': 0, 'db_other': 1, 'db_seqs_counts': {
