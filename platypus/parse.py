@@ -286,4 +286,8 @@ def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
 
                 db_seqs_counts_b[subject_id_b] += 1
 
+    # closing files handlers
+    for r in results:
+        r['summary_fh'].close()
+
     return results
