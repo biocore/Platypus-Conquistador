@@ -8,7 +8,6 @@
 from __future__ import division
 
 from os.path import join, basename
-from operator import itemgetter
 
 from click import BadParameter
 from skbio.util import create_dir
@@ -126,14 +125,6 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
         combined_results[4].append(str(item['equal']))
         combined_results[5].append(str(no_hits))
 
-        # tiny helper function to save hits files
-        def save_hits(data, name):
-
-            s_hits = sorted(data, key=itemgetter(1), reverse=True)
-            filename = join(output_dir, name)
-            with open(filename, 'w') as fd:
-                fd.write('\n'.join(['%s\t%d' % (k, v)
-                                    for k, v in s_hits if v != 0]))
     # saving collated results
     with open(join(output_dir, "compile_output.txt"), 'w') as compiled_output:
         compiled_output.write('\n'.join(['\t'.join(item)
