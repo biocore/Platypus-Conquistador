@@ -9,7 +9,7 @@ from __future__ import division
 from itertools import product, izip
 from collections import namedtuple
 from copy import copy
-
+from os.path import join
 
 _header = (('query', str),
            ('subject', str),
@@ -198,7 +198,7 @@ def parse_second_database(db, best_hits, percentage_ids_other,
 
 
 def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
-                    alignment_lengths_other, best_hits):
+                    alignment_lengths_other, best_hits, output_dir):
     """Format the results into a summary dictionary
 
     Parameters
@@ -217,6 +217,8 @@ def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
         database.
     best_hits : dict
         A dictionary with the best hits found in the databases.
+    output_dir : str
+        File path to the output directory.
 
     Returns
     -------
@@ -224,19 +226,24 @@ def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
         List of dictionaries with the summarized results.
     """
     results = []
+    summary_fh = {}
 
     iter_a = product(percentage_ids, alignment_lengths)
     iter_b = product(percentage_ids_other, alignment_lengths_other)
+
     for (perc_id_a, aln_len_a), (perc_id_b, aln_len_b) in izip(iter_a, iter_b):
         filename = "p1_%d-a1_%d_p2_%d-a2_%d" % (perc_id_a, aln_len_a,
                                                 perc_id_b, aln_len_b)
+        summary_filename = join(output_dir, "summary_" + filename + ".txt")
+        summary_fh = open(summary_filename, 'w')
+        summary_fh.write('#SeqId\tFirst\tSecond\n')
         results.append({
             'filename': filename,
             'db_interest': 0,
             'db_other': 0,
             'perfect_interest': 0,
             'equal': 0,
-            'summary': ['#SeqId\tFirst\tSecond'],
+            'summary_fh': summary_fh,
             'db_seqs_counts': {'a': {}, 'b': {}}})
 
     for seq_name, values in best_hits.items():
@@ -263,21 +270,24 @@ def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
             # Comparing bit_scores to create outputs
             if vals['a']['bit_score'] == vals['b']['bit_score']:
                 results[i]['equal'] += 1
-                results[i]['summary'].append('%s\t%s\t%s' % (seq_name,
-                                                             subject_id_a,
-                                                             subject_id_b))
+                results[i]['summary_fh'].write('%s\t%s\t%s\n' % (
+                    seq_name, subject_id_a, subject_id_b))
                 db_seqs_counts_a[subject_id_a] += 1
                 db_seqs_counts_b[subject_id_b] += 1
             elif vals['a']['bit_score'] > vals['b']['bit_score']:
                 if not subject_id_b:
                     results[i]['perfect_interest'] += 1
-                    results[i]['summary'].append('%s\t%s\t' % (seq_name,
-                                                               subject_id_a))
+                    results[i]['summary_fh'].write('%s\t%s\t\n' % (
+                        seq_name, subject_id_a))
                 db_seqs_counts_a[subject_id_a] += 1
             else:
                 results[i]['db_other'] += 1
-                results[i]['summary'].append('%s\n\t%s' % (seq_name, ''))
+                results[i]['summary_fh'].write('%s\t\t\n' % (seq_name))
 
                 db_seqs_counts_b[subject_id_b] += 1
+
+    # closing files handlers
+    for r in results:
+        r['summary_fh'].close()
 
     return results
