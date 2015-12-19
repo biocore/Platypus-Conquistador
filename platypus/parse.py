@@ -198,7 +198,8 @@ def parse_second_database(db, best_hits, percentage_ids_other,
 
 
 def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
-                    alignment_lengths_other, best_hits, output_dir):
+                    alignment_lengths_other, best_hits, output_dir,
+                    hits_to_first, hits_to_second):
     """Format the results into a summary dictionary
 
     Parameters
@@ -219,6 +220,12 @@ def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
         A dictionary with the best hits found in the databases.
     output_dir : str
         File path to the output directory.
+    hits_to_first : bool
+        Outputs all the labels of the sequences being hit in the first
+        database.
+    hits_to_second : bool
+        Outputs all the labels of the sequences being hit in the second
+        database.
 
     Returns
     -------
@@ -232,19 +239,29 @@ def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
     iter_b = product(percentage_ids_other, alignment_lengths_other)
 
     for (perc_id_a, aln_len_a), (perc_id_b, aln_len_b) in izip(iter_a, iter_b):
-        filename = "p1_%d-a1_%d_p2_%d-a2_%d" % (perc_id_a, aln_len_a,
-                                                perc_id_b, aln_len_b)
-        summary_filename = join(output_dir, "summary_" + filename + ".txt")
-        summary_fh = open(summary_filename, 'w')
+        # basic filename for each combination of options
+        fn = "p1_%d-a1_%d_p2_%d-a2_%d" % (perc_id_a, aln_len_a,
+                                          perc_id_b, aln_len_b)
+        # filename, handler and header for the summary results
+        summary_fn = join(output_dir, "summary_" + fn + ".txt")
+        summary_fh = open(summary_fn, 'w')
         summary_fh.write('#SeqId\tFirst\tSecond\n')
-        results.append({
-            'filename': filename,
-            'db_interest': 0,
-            'db_other': 0,
-            'perfect_interest': 0,
-            'equal': 0,
-            'summary_fh': summary_fh,
-            'db_seqs_counts': {'a': {}, 'b': {}}})
+        # filename for the hits to first/second databases
+        hits_to_first_fn = join(output_dir, "hits_to_first_db_%s.txt" % fn)
+        hits_to_second_fn = join(output_dir, "hits_to_second_db_%s.txt" % fn)
+        # generating basic element
+        tmp = {'filename': fn,
+               'db_interest': 0,
+               'db_other': 0,
+               'perfect_interest': 0,
+               'equal': 0,
+               'summary_fh': summary_fh,
+               'db_seqs_counts': {'a': None, 'b': None}}
+        if hits_to_first:
+            tmp['db_seqs_counts']['a'] = open(hits_to_first_fn, 'w')
+        if hits_to_second:
+            tmp['db_seqs_counts']['b'] = open(hits_to_second_fn, 'w')
+        results.append(tmp)
 
     for seq_name, values in best_hits.items():
         seq_name = seq_name.split(' ')[0].strip()
@@ -256,38 +273,34 @@ def process_results(percentage_ids, alignment_lengths, percentage_ids_other,
             db_seqs_counts_a = results[i]['db_seqs_counts']['a']
             db_seqs_counts_b = results[i]['db_seqs_counts']['b']
 
-            # validating duplicated results in the databases
-            # do this step in a different script early in the pipeline
-            if subject_id_a not in db_seqs_counts_a:
-                db_seqs_counts_a[subject_id_a] = 0
-                if subject_id_a == db_seqs_counts_b:
-                    raise Warning("%s is in both databases" % subject_id_a)
-            if subject_id_b not in db_seqs_counts_b:
-                db_seqs_counts_b[subject_id_b] = 0
-                if subject_id_b == db_seqs_counts_a:
-                    raise Warning("%s is in both databases" % subject_id_b)
-
             # Comparing bit_scores to create outputs
             if vals['a']['bit_score'] == vals['b']['bit_score']:
                 results[i]['equal'] += 1
                 results[i]['summary_fh'].write('%s\t%s\t%s\n' % (
                     seq_name, subject_id_a, subject_id_b))
-                db_seqs_counts_a[subject_id_a] += 1
-                db_seqs_counts_b[subject_id_b] += 1
+                if db_seqs_counts_a:
+                    db_seqs_counts_a.write('%s\n' % subject_id_a)
+                if db_seqs_counts_b:
+                    db_seqs_counts_b.write('%s\n' % subject_id_b)
             elif vals['a']['bit_score'] > vals['b']['bit_score']:
                 if not subject_id_b:
                     results[i]['perfect_interest'] += 1
                     results[i]['summary_fh'].write('%s\t%s\t\n' % (
                         seq_name, subject_id_a))
-                db_seqs_counts_a[subject_id_a] += 1
+                if db_seqs_counts_a:
+                    db_seqs_counts_a.write('%s\n' % subject_id_a)
             else:
                 results[i]['db_other'] += 1
                 results[i]['summary_fh'].write('%s\t\t\n' % (seq_name))
-
-                db_seqs_counts_b[subject_id_b] += 1
+                if db_seqs_counts_b:
+                    db_seqs_counts_b.write('%s\n' % subject_id_b)
 
     # closing files handlers
     for r in results:
         r['summary_fh'].close()
+        if r['db_seqs_counts']['a']:
+            r['db_seqs_counts']['a'].close()
+        if r['db_seqs_counts']['b']:
+            r['db_seqs_counts']['b'].close()
 
     return results

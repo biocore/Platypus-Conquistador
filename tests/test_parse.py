@@ -199,20 +199,17 @@ class TopLevelTests(TestCase):
                       'alg_length': 10},
                 'b': {'evalue': 0.0, 'subject_id': 'RESULT-B',
                       'bit_score': 959.0, 'percentage_id': 100,
-                      'alg_length': 900}}]
+                      'alg_length': 900}}],
+            'NO-VALS': [None]
         }
 
         out_results = process_results([0.80], [50], [0.30], [30], best_hits,
-                                      self.base)
-        # removing the summary_fh pointer so we don't need to test
+                                      self.base, False, False)
+        # removing the file pointers so we don't need to test
         out_results[0].pop('summary_fh')
+        out_results[0].pop('db_seqs_counts')
         self.assertEquals(out_results, [{
-            'db_interest': 0, 'db_other': 1, 'db_seqs_counts': {
-                'a': {'NZ_ABEH01000005_641736102': 1,
-                      'RESULT-A': 1,
-                      'NZ_ABEH01000018_641736102': 1},
-                'b': {None: 0, 'RESULT-B': 2}},
-            'perfect_interest': 2, 'equal': 1,
+            'db_interest': 0, 'db_other': 1, 'perfect_interest': 2, 'equal': 1,
             'filename': 'p1_0-a1_50_p2_0-a2_30'}])
 
 if __name__ == "__main__":

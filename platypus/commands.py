@@ -50,10 +50,10 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
         other database search results. If None is passed, it defaults to
         `[50]`.
     hits_to_first : bool, optional defaults to False
-        Outputs the labels and counts of the sequences being hit in the first
+        Outputs all the labels of the sequences being hit in the first
         database.
     hits_to_second : bool, optional defaults to False
-        Outputs the labels and counts of the sequences being hit in the second
+        Outputs all the labels of the sequences being hit in the second
         database.
 
     Raises
@@ -102,7 +102,7 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
     # parse results
     results = process_results(interest_pcts, interest_alg_lens,
                               other_pcts, other_alg_lens, best_hits,
-                              output_dir)
+                              output_dir, hits_to_first, hits_to_second)
 
     # Collating output and writing full results
     for i, item in enumerate(results):
@@ -134,15 +134,6 @@ def compare(interest_fp, other_fp, output_dir='blast-results-compare',
             with open(filename, 'w') as fd:
                 fd.write('\n'.join(['%s\t%d' % (k, v)
                                     for k, v in s_hits if v != 0]))
-
-        if hits_to_first:
-            save_hits(item['db_seqs_counts']['a'].items(),
-                      "hits_to_first_db_%s.txt" % item['filename'])
-
-        if hits_to_second:
-            save_hits(item['db_seqs_counts']['b'].items(),
-                      "hits_to_second_db_%s.txt" % item['filename'])
-
     # saving collated results
     with open(join(output_dir, "compile_output.txt"), 'w') as compiled_output:
         compiled_output.write('\n'.join(['\t'.join(item)
