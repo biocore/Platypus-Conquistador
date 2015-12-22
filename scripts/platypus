@@ -54,11 +54,11 @@ DIR_TYPE = click.Path(exists=False, file_okay=False, dir_okay=True,
               'in the other database search results. If None is passed the '
               'values from --interest_alg_lengths will be used.', default=None)
 @click.option('--hits_to_first', required=False, is_flag=True, default=False,
-              help='Outputs the labels and counts of the sequences being hit '
-              'in the first database.', show_default=True)
+              help='Outputs all the labels of the sequences being hit in the '
+              'first database.', show_default=True)
 @click.option('--hits_to_second', required=False, is_flag=True, default=False,
-              help='Outputs the labels and counts of the sequences being hit '
-              'in the second database.', show_default=True)
+              help='Outputs all the labels of the sequences being hit in the '
+              'second database.', show_default=True)
 def compare(interest_fp, other_fp, output_dir='blast-results-compare',
             interest_pcts=None, interest_alg_lens=None, other_pcts=None,
             other_alg_lens=None, hits_to_first=None, hits_to_second=None):
